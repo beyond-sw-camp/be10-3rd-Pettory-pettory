@@ -1,6 +1,6 @@
 <script setup>
 import {RouterLink} from "vue-router";
-import Button from '@/common/Button.vue';
+import ButtonSmallColor from '@/components/common/ButtonSmallColor.vue';
 </script>
 
 <template>
@@ -13,10 +13,10 @@ import Button from '@/common/Button.vue';
         <a>게시판</a>
         <a>상담</a>
         <RouterLink to="/login" active-class="active" replace>
-          <Button>로그인</Button>
+          <ButtonSmallColor>로그인</ButtonSmallColor>
         </RouterLink>
         <RouterLink to="/users" active-class="active" replace>
-          <Button>회원가입</Button>
+          <ButtonSmallColor>회원가입</ButtonSmallColor>
         </RouterLink>
       </nav>
     </div>
