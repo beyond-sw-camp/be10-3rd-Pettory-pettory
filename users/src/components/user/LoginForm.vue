@@ -27,6 +27,7 @@ const handleLogin = () => {
       <p v-if="errorMessage" class="error">{{errorMessage}}</p>
 
       <!-- 이메일 필드 -->
+      <p>*이메일</p>
       <InputBoxLongGray
       v-model="email"
       placeholder="example.gmail.com"
