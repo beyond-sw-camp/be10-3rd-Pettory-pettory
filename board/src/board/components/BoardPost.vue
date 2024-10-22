@@ -4,7 +4,7 @@
     <div class="post-title">{{ post.title }}</div>
     <div class="post-created-at">{{ post.createdAt }}</div>
     <div class="post-author">{{ post.author }}</div>
-    <div class="post-views">조회수: {{ post.views }}</div>
+    <div class="post-views">{{ post.views }}</div>
   </div>
 </template>
 

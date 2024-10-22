@@ -10,7 +10,6 @@ import CategoryList from './category/view/CategoryList.vue';
 
     <Header />
     <router-view></router-view>
-    <router-link to="/board/category">카테고리 보기</router-link>
   </div>
 </template>
 
