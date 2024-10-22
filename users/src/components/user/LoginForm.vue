@@ -26,20 +26,26 @@ const handleLogin = () => {
       <!-- 에러 메세지 표시 -->
       <p v-if="errorMessage" class="error">{{errorMessage}}</p>
 
-      <!-- 이메일 필드 -->
-      <p>*이메일</p>
-      <InputBoxLongGray
-      v-model="email"
-      placeholder="example.gmail.com"
-      type="email"
-      />
+      <div class="field-group">
+        <!-- 이메일 필드 -->
+        <p>*이메일</p>
+        <InputBoxLongGray
+            v-model="email"
+            placeholder="example.gmail.com"
+            type="email"
+        />
+      </div>
 
       <!-- 비밀번호 필드 -->
-      <InputBoxLongGray
-      v-model="pwd"
-      placeholder="영문대소문자, 특수문자를 모두 포함하여 8자리 이상"
-      type="password"
-      />
+      <div class="field-group">
+        <p>*비밀번호</p>
+        <InputBoxLongGray
+            v-model="pwd"
+            placeholder="영문대소문자, 특수문자를 모두 포함하여 8자리 이상"
+            type="password"
+        />
+      </div>
+
 
       <!-- 로그인 버튼 -->
       <ButtonLongColor @click="handleLogin">
@@ -76,6 +82,17 @@ const handleLogin = () => {
   border-radius: 10px;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
   background-color: #fff;
+}
+
+.field-group {
+  width: 70%;
+  margin-bottom: 15px;
+}
+
+.form-group p {
+  text-align: left;
+  font-weight: bold;
+  font-size: 14px;
 }
 
 h2 {

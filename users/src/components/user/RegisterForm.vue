@@ -13,7 +13,7 @@ const errorMessage = ref('');
 const handleRegister = () => {
   if (!email.value || !nickName.value ||
       !name.value || !pwd.value || !birth.value) {
-    errorMessage.value = '빠진 부분이 없는지 확인해주세요!';
+    errorMessage.value = '빠진 부분이 없는지 확인해주세요.';
   } else {
     errorMessage.value = 'else';
   }
@@ -114,6 +114,5 @@ const handleRegister = () => {
   color: #53D9C1;
   font-weight: bold;
 }
-
 
 </style>
