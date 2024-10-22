@@ -2,14 +2,15 @@
   <div class="category-item">
     <span class="category-name">{{ categoryName }}</span>
     <div class="category-actions">
-      <button @click="$emit('edit')">카테고리 수정</button>
-      <button @click="$emit('delete')">카테고리 삭제</button>
+      <CategoryButton @click="$emit('edit')">카테고리 수정</CategoryButton>
+      <CategoryButton @click="$emit('delete')">카테고리 삭제</CategoryButton>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import CategoryButton from '@/category/components/CategoryButton.vue';  // 커스텀 버튼 컴포넌트 import
 
 export default defineComponent({
   props: {
@@ -17,6 +18,9 @@ export default defineComponent({
       type: String,
       required: true
     }
+  },
+  components: {
+    CategoryButton
   }
 });
 </script>
@@ -36,17 +40,11 @@ export default defineComponent({
   font-size: 1.5rem;
 }
 
-.category-actions button {
-  margin-left: 10px;
-  background-color: #66cccc;
-  border: none;
-  padding: 5px 10px;
-  color: white;
-  cursor: pointer;
-  border-radius: 5px;
+.category-actions {
+  display: flex;
 }
 
-.category-actions button:hover {
-  background-color: #559999;
+.category-actions button {
+  margin-left: 10px;
 }
 </style>
