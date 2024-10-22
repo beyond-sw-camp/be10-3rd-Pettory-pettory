@@ -15,7 +15,7 @@
     <button class="create-button" @click="openCreateModal">카테고리 생성</button>
 
     <!-- 수정 모달 -->
-    <ModalComponent
+    <UpdateCategoryModal
         :show="isEditModalVisible"
         :initialCategoryName="selectedCategoryName"
         @edit="updateCategoryName"
@@ -23,7 +23,7 @@
     />
 
     <!-- 삭제 확인 모달 -->
-    <DeleteConfirmModal
+    <DeleteCategoryModal
         :show="isDeleteModalVisible"
         @confirm-delete="deleteCategoryConfirmed"
         @close="closeDeleteModal"
@@ -39,83 +39,37 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
 import CategoryItem from '../components/CategoryItem.vue';
-import ModalComponent from '../modal/ModalComponent.vue';
-import DeleteConfirmModal from '../modal/DeleteConfirmModal.vue';
 import CreateCategoryModal from '../modal/CreateCategoryModal.vue';
+import UpdateCategoryModal from "@/modal/UpdateCategoryModal.vue";
+import DeleteCategoryModal from "@/modal/DeleteCategoryModal.vue";
+import { useCategoryLogic } from '@/logic/CategoryListLogic.vue' // 로직 가져오기
 
 export default defineComponent({
   components: {
+    DeleteCategoryModal,
+    UpdateCategoryModal,
     CategoryItem,
-    ModalComponent,
-    DeleteConfirmModal,
     CreateCategoryModal
   },
   setup() {
-    const categories = ref([
-      { id: 1, name: '실종' },
-      { id: 2, name: '자유' },
-      { id: 3, name: '강아지' },
-      { id: 4, name: '고양이' },
-      { id: 5, name: '간식' },
-      { id: 6, name: '장난감' }
-    ]);
-
-    const isEditModalVisible = ref(false);
-    const isDeleteModalVisible = ref(false);
-    const isCreateModalVisible = ref(false);
-    const selectedCategoryId = ref(null);
-    const selectedCategoryName = ref('');
-
-    const openEditModal = (category) => {
-      selectedCategoryId.value = category.id;
-      selectedCategoryName.value = category.name;
-      isEditModalVisible.value = true;
-    };
-
-    const closeEditModal = () => {
-      isEditModalVisible.value = false;
-    };
-
-    const updateCategoryName = (newName) => {
-      const category = categories.value.find(cat => cat.id === selectedCategoryId.value);
-      if (category) {
-        category.name = newName;
-      }
-      closeEditModal();
-    };
-
-    const openDeleteModal = (category) => {
-      selectedCategoryId.value = category.id;
-      isDeleteModalVisible.value = true;
-    };
-
-    const closeDeleteModal = () => {
-      isDeleteModalVisible.value = false;
-    };
-
-    const deleteCategoryConfirmed = () => {
-      categories.value = categories.value.filter(category => category.id !== selectedCategoryId.value);
-      closeDeleteModal();
-    };
-
-    const openCreateModal = () => {
-      isCreateModalVisible.value = true;
-    };
-
-    const closeCreateModal = () => {
-      isCreateModalVisible.value = false;
-    };
-
-    const createCategory = (newName) => {
-      const newCategory = {
-        id: categories.value.length + 1,
-        name: newName
-      };
-      categories.value.push(newCategory);
-      closeCreateModal();
-    };
+    const {
+      categories,
+      isEditModalVisible,
+      isDeleteModalVisible,
+      isCreateModalVisible,
+      selectedCategoryName,
+      openEditModal,
+      closeEditModal,
+      updateCategoryName,
+      openDeleteModal,
+      closeDeleteModal,
+      deleteCategoryConfirmed,
+      openCreateModal,
+      closeCreateModal,
+      createCategory
+    } = useCategoryLogic();
 
     return {
       categories,
