@@ -1,20 +1,19 @@
- 게시판 카테고리
-<template>
+<script setup lang="ts">
+import Header from "@/header/Header.vue";
+import CategoryList from './view/CategoryList.vue';
+
+</script>
+
+
+ <template>
   <div>
-    <CategoryList />
+
+    <Header />
+    <router-view></router-view>
+    <router-link to="/board/category">카테고리 보기</router-link>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-import CategoryList from './components/CategoryList.vue';
-
-export default defineComponent({
-  components: {
-    CategoryList
-  }
-});
-</script>
 
 <style>
 /* 전역 스타일을 여기에 추가 */

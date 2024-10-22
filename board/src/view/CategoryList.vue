@@ -40,10 +40,10 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import CategoryItem from './CategoryItem.vue';
-import ModalComponent from './ModalComponent.vue';
-import DeleteConfirmModal from './DeleteConfirmModal.vue';
-import CreateCategoryModal from './CreateCategoryModal.vue';
+import CategoryItem from '../components/CategoryItem.vue';
+import ModalComponent from '../modal/ModalComponent.vue';
+import DeleteConfirmModal from '../modal/DeleteConfirmModal.vue';
+import CreateCategoryModal from '../modal/CreateCategoryModal.vue';
 
 export default defineComponent({
   components: {
