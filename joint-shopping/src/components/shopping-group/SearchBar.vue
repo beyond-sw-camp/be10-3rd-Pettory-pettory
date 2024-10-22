@@ -4,7 +4,7 @@ import ButtonSmallColor from "@/components/common/ButtonSmallColor.vue";
 
 // 검색 상태 관리
 const state = reactive({
-  productName: ''
+  searchData: ''
 });
 
 const emit = defineEmits(['search']);
@@ -12,7 +12,7 @@ const emit = defineEmits(['search']);
 // 부모 컴포넌트로 검색 이벤트 전달
 const emitSearch = () => {
   emit('search', {
-    productName: state.productName || null     // 입력 안되면 null
+    searchData: state.searchData || null     // 입력 안되면 null
   });
 };
 </script>
@@ -21,7 +21,7 @@ const emitSearch = () => {
   <div class="search-bar">
     <input
         type="text"
-        v-model="state.productName"
+        v-model="state.searchData"
         placeholder="상품명을 입력하세요"
     />
 
