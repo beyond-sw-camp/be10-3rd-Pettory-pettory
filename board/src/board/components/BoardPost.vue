@@ -31,9 +31,11 @@ export default defineComponent({
 
 <style scoped>
 .post-item {
-  border: 1px solid #ddd;
+  border: 1px solid #66cccc;
   padding: 10px;
-  margin: 10px 0;
+  margin: 10px auto; /* 컴포넌트를 중앙에 정렬 (자동 여백) */
+  max-width: 1000px; /* 최대 너비 제한 */
+  width: 100%; /* 부모 요소의 100% 너비를 채움 */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -41,5 +43,10 @@ export default defineComponent({
 
 .post-category, .post-title, .post-created-at, .post-author, .post-views {
   margin-right: 15px;
+}
+
+
+.post-title {
+  flex-basis: 40%; /* 제목은 더 넓게 */
 }
 </style>

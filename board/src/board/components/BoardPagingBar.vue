@@ -34,17 +34,24 @@ export default defineComponent({
       required: true
     }
   },
-  emits: ['goToPage', 'prevSet', 'nextSet'],
-  methods: {
-    goToPage(page: number) {
-      this.$emit('goToPage', page);
-    },
-    prevSet() {
-      this.$emit('prevSet');
-    },
-    nextSet() {
-      this.$emit('nextSet');
-    }
+  setup(props, { emit }) {
+    const goToPage = (page: number) => {
+      emit('goToPage', page);
+    };
+
+    const prevSet = () => {
+      emit('prevSet');
+    };
+
+    const nextSet = () => {
+      emit('nextSet');
+    };
+
+    return {
+      goToPage,
+      prevSet,
+      nextSet,
+    };
   }
 });
 </script>
