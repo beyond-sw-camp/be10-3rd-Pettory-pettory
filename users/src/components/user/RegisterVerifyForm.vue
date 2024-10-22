@@ -6,24 +6,25 @@ import ButtonLongColor from "@/components/common/ButtonLongColor.vue";
 const verifyCode = ref('');
 const errorMessage = ref('');
 
-const handleVerify = () => {
+const emit = defineEmits(['verify']);
+
+const handleVerifyClick = () => {
   if (!verifyCode.value) {
     errorMessage.value = '인증코드를 입력해주세요.';
   } else {
-    errorMessage.value = 'else';
+    errorMessage.value = '';
+    emit('verify', verifyCode.value);
   }
 };
 
 </script>
-
 <template>
+  <div class="register-verify-form">
 
-  <div class = "register-verify-form">
     <h2>이메일 인증코드 입력</h2>
 
-
     <!-- 에러 메세지 표시 -->
-    <p v-if="errorMessage" class="error">{{errorMessage}}</p>
+    <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
 
     <!-- 인증코드 필드 -->
     <div class="field-group">
@@ -36,9 +37,10 @@ const handleVerify = () => {
     </div>
 
     <!-- 인증 버튼 -->
-    <ButtonLongColor @click="handleVerify">
+    <ButtonLongColor @click="handleVerifyClick">
       인증하기
     </ButtonLongColor>
+
   </div>
 </template>
 
@@ -70,5 +72,4 @@ const handleVerify = () => {
   color: #53D9C1;
   font-weight: bold;
 }
-
 </style>

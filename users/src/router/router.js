@@ -23,6 +23,10 @@ const router = createRouter({
             path: '/users/emails/codes',
             component: RegisterVerifyView
         },
+        {
+            path: '/users/emails/codes/home',
+            component: RegisterVerifyView
+        },
     ]
 });
 

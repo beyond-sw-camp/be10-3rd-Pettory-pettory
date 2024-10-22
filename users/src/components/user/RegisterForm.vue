@@ -1,23 +1,35 @@
 <script setup>
-import {ref} from 'vue';
+import {computed, ref} from 'vue';
 import InputBoxLongGray from '@/components/common/InputBoxLongGray.vue';
 import ButtonLongColor from "@/components/common/ButtonLongColor.vue";
 
-const email = ref('');
-const nickName = ref('');
-const name = ref('');
-const pwd = ref('');
-const birth = ref('');
+
+const formData = ref({
+  email: "",
+  nickName: "",
+  name: "",
+  pwd: "",
+  birth: ""
+});
 const errorMessage = ref('');
 
-const handleRegister = () => {
-  if (!email.value || !nickName.value ||
-      !name.value || !pwd.value || !birth.value) {
-    errorMessage.value = '빠진 부분이 없는지 확인해주세요.';
-  } else {
-    errorMessage.value = 'else';
-  }
+const emit = defineEmits(['submit']);
+
+const handleRegisterClick = () => {
+  const formDataToSend = { ...formData.value };
+
+  emit('submit', formDataToSend);
 };
+
+const isFormValid = computed(() => {
+  return (
+      formData.value.email &&
+      formData.value.nickName &&
+      formData.value.name &&
+      formData.value.pwd &&
+      formData.value.birth
+  );
+});
 </script>
 
 <template>
@@ -31,17 +43,17 @@ const handleRegister = () => {
     <div class="field-group">
       <p>*이메일</p>
       <InputBoxLongGray
-          v-model="email"
+          v-model="formData.email"
           placeholder="example@gmail.com"
           type="email"
       />
     </div>
 
     <div class="field-group">
-    <!-- 닉네임-->
+      <!-- 닉네임-->
       <p>*닉네임</p>
       <InputBoxLongGray
-          v-model="nickName"
+          v-model="formData.nickName"
           placeholder="예) 길똥"
           type="text"
       />
@@ -51,17 +63,17 @@ const handleRegister = () => {
     <div class="field-group">
       <p>*이름</p>
       <InputBoxLongGray
-          v-model="nickName"
+          v-model="formData.name"
           placeholder="예) 홍길동"
           type="text"
       />
     </div>
 
     <div class="field-group">
-    <!-- 비밀번호 필드 -->
+      <!-- 비밀번호 필드 -->
       <p>*비밀번호</p>
       <InputBoxLongGray
-          v-model="pwd"
+          v-model="formData.pwd"
           placeholder="영문대소문자, 특수문자를 모두 포함하여 8자리 이상"
           type="password"
       />
@@ -72,14 +84,14 @@ const handleRegister = () => {
       <!-- 생년월일 필드 -->
       <p>*생년월일</p>
       <InputBoxLongGray
-          v-model="pwd"
+          v-model="formData.birth"
           placeholder="2000-01-01"
           type="date"
       />
     </div>
 
     <!-- 회원가입 버튼 -->
-    <ButtonLongColor @click="handleRegister">
+    <ButtonLongColor @click="handleRegisterClick" :disabled="!isFormValid">
       가입하기
     </ButtonLongColor>
 
