@@ -10,6 +10,16 @@ const props = defineProps({
   }
 });
 
+const joinGroup = () => {
+
+}
+
+
+// 검색 조건이 변경될 때마다 API 호출
+const onSearch = (searchParams) => {
+  state.groups.title = searchParams.searchData;
+  // fetchProducts(1);  // 페이지를 1로 초기화하고 다시 호출 // 검색 기능 라우터 이후에 구현 악시오스 이용
+};
 </script>
 
 <template>
@@ -29,7 +39,7 @@ const props = defineProps({
       </div>
       <!-- 작성일 -->
       <div class="card-right-content">
-        <ButtonSmallColor class="group-join-button" @click="join">참가</ButtonSmallColor>
+        <ButtonSmallColor class="group-join-button" @click="joinGroup" :group="group">참가</ButtonSmallColor>
         <span class="group-date">작성일: {{ group.date }}</span>
       </div>
     </div>

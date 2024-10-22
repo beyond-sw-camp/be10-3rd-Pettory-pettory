@@ -14,7 +14,9 @@ const state = reactive({
       participants: 10,
       price: 10000,
       maxParticipants: 100,
-      date: '2000-01-01'
+      date: '2000-01-01',
+      img : "@/assets/프로젝트.png",
+      contents : "강아지 사료 사실분 구합니다."
     },
     {
       title: '사료 공동구매 하실분 구해요!',
@@ -22,7 +24,9 @@ const state = reactive({
       participants: 10,
       price: 10000,
       maxParticipants: 100,
-      date: '2000-01-01'
+      date: '2000-01-01',
+      img : "@/assets/프로젝트.png",
+      contents : "강아지 사료 사실분 구합니다.@@@@@@@@@@@@@@@@@@@@@@@@@"
     }
   ],
   currentPage: 1,
