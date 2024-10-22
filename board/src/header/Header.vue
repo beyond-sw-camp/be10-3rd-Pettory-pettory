@@ -1,6 +1,6 @@
 <script setup>
 import {RouterLink} from "vue-router";
-import ButtonSmallColor from '@/components/ButtonSmallColor.vue';
+import ButtonSmallColor from '@/category/components/ButtonSmallColor.vue';
 </script>
 
 <template>

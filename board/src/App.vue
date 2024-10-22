@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Header from "@/header/Header.vue";
-import CategoryList from './view/CategoryList.vue';
+import CategoryList from './category/view/CategoryList.vue';
 
 </script>
 

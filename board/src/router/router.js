@@ -1,6 +1,6 @@
 import {createRouter, createWebHashHistory, createWebHistory} from "vue-router";
-import CategoryList from "@/view/CategoryList.vue";
-import Board from "@/view/Board.vue"
+import CategoryList from "@/category/view/CategoryList.vue";
+import Board from "@/board/view/Board.vue"
 
 
 const router = createRouter( {
@@ -9,7 +9,7 @@ const router = createRouter( {
         {
             path : '/board',
             name : 'board',
-            component: () => import('@/view/Board.vue')
+            component: () => import('@/board/view/Board.vue')
         },
         {
             path : '/board/category',

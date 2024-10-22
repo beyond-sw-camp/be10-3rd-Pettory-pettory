@@ -2,15 +2,15 @@
   <div class="category-item">
     <span class="category-name">{{ categoryName }}</span>
     <div class="category-actions">
-      <CustomButton @click="$emit('edit')">카테고리 수정</CustomButton>
-      <CustomButton @click="$emit('delete')">카테고리 삭제</CustomButton>
+      <CategoryButton @click="$emit('edit')">카테고리 수정</CategoryButton>
+      <CategoryButton @click="$emit('delete')">카테고리 삭제</CategoryButton>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import CustomButton from '@/components/CategoryButton.vue';  // 커스텀 버튼 컴포넌트 import
+import CategoryButton from '@/category/components/CategoryButton.vue';  // 커스텀 버튼 컴포넌트 import
 
 export default defineComponent({
   props: {
@@ -20,7 +20,7 @@ export default defineComponent({
     }
   },
   components: {
-    CustomButton
+    CategoryButton
   }
 });
 </script>

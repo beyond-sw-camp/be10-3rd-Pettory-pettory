@@ -12,7 +12,10 @@
       />
     </div>
 
-    <button class="create-button" @click="openCreateModal">카테고리 생성</button>
+    <CategoryButton @click="openCreateModal" :buttonStyle="{ padding: '10px 25px', fontSize: '1.2rem' }">
+      카테고리 생성
+    </CategoryButton>
+
 
     <!-- 수정 모달 -->
     <UpdateCategoryModal
@@ -42,12 +45,14 @@
 import { defineComponent } from 'vue';
 import CategoryItem from '../components/CategoryItem.vue';
 import CreateCategoryModal from '../modal/CreateCategoryModal.vue';
-import UpdateCategoryModal from "@/modal/UpdateCategoryModal.vue";
-import DeleteCategoryModal from "@/modal/DeleteCategoryModal.vue";
-import { useCategoryLogic } from '@/logic/CategoryListLogic.vue' // 로직 가져오기
+import UpdateCategoryModal from "@/category/modal/UpdateCategoryModal.vue";
+import DeleteCategoryModal from "@/category/modal/DeleteCategoryModal.vue";
+import { useCategoryLogic } from '@/category/logic/CategoryListLogic.vue'
+import CategoryButton from "@/category/components/CategoryButton.vue"; // 로직 가져오기
 
 export default defineComponent({
   components: {
+    CategoryButton,
     DeleteCategoryModal,
     UpdateCategoryModal,
     CategoryItem,
@@ -105,19 +110,8 @@ export default defineComponent({
   margin-bottom: 20px;
 }
 
-.create-button {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #66cccc;
-  border: none;
-  color: white;
-  cursor: pointer;
-  border-radius: 5px;
-}
 
-.create-button:hover {
-  background-color: #559999;
-}
+
 
 /* 스크롤바 스타일 */
 .category-list::-webkit-scrollbar {
