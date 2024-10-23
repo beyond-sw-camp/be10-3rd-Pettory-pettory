@@ -34,7 +34,12 @@
 
     <!-- 게시글 목록 그리드 -->
     <div class="board-grid">
-      <div v-for="(post, index) in paginatedPosts" :key="index" class="post-item">
+      <div
+          v-for="(post, index) in paginatedPosts"
+          :key="index"
+          class="post-item"
+          @click="goToPost(post.id)"
+      >
         <div class="post-information">
           <span class="post-category">{{ post.category }}</span>
           <span class="post-views">조회수 : {{ post.views }}</span>
@@ -75,6 +80,7 @@
 import { defineComponent, ref, computed } from 'vue';
 import BoardPagingBar from "@/board/components/BoardPagingBar.vue";
 import BoardButton from "@/board/components/BoardButton.vue";
+import {useRouter} from "vue-router";
 
 interface Post {
   category: string;
@@ -103,7 +109,7 @@ export default defineComponent({
     const categories = ref(['전체', 'IT', '생활', '여행']);  // 카테고리 목록
     const selectedCategory = ref<string>('전체');  // 기본 선택된 카테고리: '전체'
     const isCategoryListVisible = ref(false);  // 카테고리 목록 보이기/숨기기
-
+    const router = useRouter(); // router 인스턴스 사용
     const currentPage = ref<number>(1);
     const postsPerPage = ref<number>(6); // 한 페이지당 6개의 게시글
     const totalPages = computed(() => Math.ceil(filteredPosts.value.length / postsPerPage.value));
@@ -171,6 +177,11 @@ export default defineComponent({
       console.log('검색어:', searchQuery.value); // 실제 검색 로직을 여기에 추가
     };
 
+    const goToPost = (postId: number) => {
+      router.push({ name: 'BoardPost', params: { id: postId } });
+    };
+
+
     return {
       posts,
       currentPage,
@@ -189,7 +200,9 @@ export default defineComponent({
       prevSet,
       nextSet,
       search,
-      searchQuery
+      searchQuery,
+      goToPost,
+      router
     };
   }
 });

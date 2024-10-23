@@ -1,7 +1,6 @@
 import {createRouter, createWebHashHistory, createWebHistory} from "vue-router";
 import CategoryList from "@/category/view/CategoryListView.vue";
-import Board from "@/board/view/BoardView.vue"
-import BoardPost from "@/board/components/BoardPost.vue";
+
 
 
 const router = createRouter( {
@@ -23,9 +22,14 @@ const router = createRouter( {
             component : () => import('@/board/view/BoardPostView.vue')
         },
         {
-            path : '/board/post/new',
-            name : 'BoardPostNew',
-            component : () => import('@/board/view/BoardPostCreateView.vue')
+            path : '/board/post/:id',
+            name : 'BoardPostDetail',
+            component : () => import('@/board/view/BoardPostVIew.vue')
+        },
+        {
+            path : '/',
+            name : 'Main',
+            component : () => import('@/main/view/MainView.vue')
         }
     ]
 });

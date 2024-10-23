@@ -21,8 +21,8 @@
 
     <!-- 수정 및 삭제 버튼 -->
     <div class="post-actions">
-      <button @click="editPost">게시글 수정</button>
-      <button @click="deletePost">게시글 삭제</button>
+      <BoardButton @click="editPost">게시글 수정</BoardButton>
+      <BoardButton @click="deletePost">게시글 삭제</BoardButton>
     </div>
 
     <!-- 댓글 목록 -->
@@ -49,8 +49,10 @@
 
 <script lang="ts">
 import { ref, onMounted } from 'vue';
+import BoardButton from "@/board/components/BoardButton.vue";
 
 export default {
+  components: {BoardButton},
   setup() {
     const post = ref({
       title: '게시글 제목',
@@ -166,8 +168,6 @@ export default {
 
 .post-actions button {
   padding: 8px 12px;
-  border: 1px solid #ccc;
-  background-color: #f5f5f5;
   cursor: pointer;
 }
 
