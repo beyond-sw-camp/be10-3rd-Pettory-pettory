@@ -30,6 +30,11 @@ const router = createRouter( {
             path : '/',
             name : 'Main',
             component : () => import('@/main/view/MainView.vue')
+        },
+        {
+            path : '/board/post/new',
+            name : 'BoardPostCreate',
+            component : () => import('@/board/view/BoardPostCreateView.vue')
         }
     ]
 });
