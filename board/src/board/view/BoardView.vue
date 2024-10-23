@@ -1,25 +1,38 @@
 <template>
+  <div class="board-page">
+    <!-- 게시판 제목과 카테고리 버튼 -->
+    <div class="board-header">
+      <h1 class="board-title">{{ selectedCategory ? `${selectedCategory} 게시판` : "게시판" }}</h1>
 
-    <div class="board-page">
-      <!-- 게시판 제목과 카테고리 버튼 -->
-      <div class="board-header">
-        <h1 class="board-title">{{ selectedCategory ? `${selectedCategory} 게시판` : "게시판" }}</h1>
-
+      <!-- 카테고리 버튼과 검색창 -->
+      <div class="header-actions">
         <!-- 카테고리 버튼 -->
         <div class="category-button" @mouseover="showCategories" @mouseleave="hideCategories">
-
           <BoardButton>카테고리</BoardButton>
 
+        </div>
           <!-- 카테고리 목록 -->
           <ul v-if="isCategoryListVisible" class="category-list">
             <li v-for="category in categories" :key="category" @click="filterByCategory(category)">
               {{ category }}
             </li>
           </ul>
-        </div>
-      </div>
+          <!-- 검색창과 검색 버튼 -->
+          <div class="search-container">
+            <input
+                type="text"
+                v-model="searchQuery"
+                placeholder="검색어를 입력하세요"
+                class="search-input"
+            />
+            <BoardButton @click="search" class="search-button">검색</BoardButton>
+          </div>
 
-      <!-- 게시글 목록 그리드 -->
+
+      </div>
+    </div>
+
+    <!-- 게시글 목록 그리드 -->
     <div class="board-grid">
       <div v-for="(post, index) in paginatedPosts" :key="index" class="post-item">
         <div class="post-information">
@@ -51,7 +64,9 @@
         <RouterLink to="/board/category" active-class="active" replace>
           <BoardButton :buttonStyle="{ padding: '3px 10px', fontSize: '1.1rem' }">카테고리 관리</BoardButton>
         </RouterLink>
-        <BoardButton :buttonStyle="{ padding: '3px 10px', fontSize: '1.1rem' }">게시글 작성</BoardButton>
+        <RouterLink to="/board/post/new" active-class="active" replace>
+          <BoardButton :buttonStyle="{ padding: '3px 10px', fontSize: '1.1rem' }">게시글 작성</BoardButton>
+        </RouterLink>
       </div>
   </div>
 </template>
@@ -92,7 +107,7 @@ export default defineComponent({
     const currentPage = ref<number>(1);
     const postsPerPage = ref<number>(6); // 한 페이지당 6개의 게시글
     const totalPages = computed(() => Math.ceil(filteredPosts.value.length / postsPerPage.value));
-
+    const searchQuery = ref('');
     const startPage = ref<number>(1);
 
     const visiblePages = computed(() => {
@@ -152,6 +167,10 @@ export default defineComponent({
       hideCategories();  // 카테고리 목록 숨기기
     };
 
+    const search = () => {
+      console.log('검색어:', searchQuery.value); // 실제 검색 로직을 여기에 추가
+    };
+
     return {
       posts,
       currentPage,
@@ -169,6 +188,8 @@ export default defineComponent({
       goToPage,
       prevSet,
       nextSet,
+      search,
+      searchQuery
     };
   }
 });
@@ -220,6 +241,7 @@ export default defineComponent({
 
 .category-button {
   position: relative;
+
 }
 
 .category-list {
@@ -278,5 +300,34 @@ export default defineComponent({
   text-align: right; /* 조회수 텍스트 오른쪽 정렬 */
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
 
+.search-container {
+  display: flex;
+  align-items: center;
+  margin-left: auto; /* 검색창과 버튼을 오른쪽 끝으로 밀기 */
+}
+.search-input {
+  padding: 5px;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px 0 0 5px; /* 왼쪽 둥근 모서리 */
+  width: 200px;
+}
+
+.search-button {
+  margin-left: -1px; /* 버튼과 검색창 사이의 경계선 없애기 */
+  padding: 5px 10px;
+  font-size: 1rem;
+  background-color: #66cccc;
+  border: 1px solid #ddd;
+  border-radius: 0 5px 5px 0; /* 오른쪽 둥근 모서리 */
+  cursor: pointer;
+  color: white;
+  transition: background-color 0.3s ease;
+}
 </style>
