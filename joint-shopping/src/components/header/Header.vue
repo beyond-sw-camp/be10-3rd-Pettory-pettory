@@ -9,7 +9,7 @@ import ButtonSmallColor from '@/components/common/ButtonSmallColor.vue';
       <nav>
         <RouterLink to="/" active-class="active" replace>펫토리로고</RouterLink>
         <a>산책모임</a>
-        <RouterLink to="/jointshopping" active-class="active" replace>공동구매</RouterLink>
+        <RouterLink to="/shoppinggroup" active-class="active" replace>공동구매</RouterLink>
         <a>게시판</a>
         <a>상담</a>
         <RouterLink to="/login" active-class="active" replace>

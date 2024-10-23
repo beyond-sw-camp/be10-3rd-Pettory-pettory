@@ -7,19 +7,16 @@ const props = defineProps({
   group: {
     type: Object,
     required: true,
+  },
+  buttonVisible: {
+    type: Boolean,
+    default: true,
   }
 });
 
-const joinGroup = () => {
+// emit 정의
+const emit = defineEmits(['join']);
 
-}
-
-
-// 검색 조건이 변경될 때마다 API 호출
-const onSearch = (searchParams) => {
-  state.groups.title = searchParams.searchData;
-  // fetchProducts(1);  // 페이지를 1로 초기화하고 다시 호출 // 검색 기능 라우터 이후에 구현 악시오스 이용
-};
 </script>
 
 <template>
@@ -29,7 +26,9 @@ const onSearch = (searchParams) => {
       <!-- 카드 내용 -->
       <div class="card-left-content">
         <!-- 참여 가능 태그 -->
-        <span class="badge">참가 가능</span>
+        <div class="circle">
+          <span>참가가능</span>
+        </div>
         <!-- 모임 설명 -->
         <div>
           <p class="group-title">{{ group.title }}</p>
@@ -39,7 +38,8 @@ const onSearch = (searchParams) => {
       </div>
       <!-- 작성일 -->
       <div class="card-right-content">
-        <ButtonSmallColor class="group-join-button" @click="joinGroup" :group="group">참가</ButtonSmallColor>
+        <ButtonSmallColor class="group-join-button" @click="emit('join')" :group="group" v-if="buttonVisible">참가
+        </ButtonSmallColor>
         <span class="group-date">작성일: {{ group.date }}</span>
       </div>
     </div>
@@ -75,13 +75,15 @@ const onSearch = (searchParams) => {
   gap: 16px;
 }
 
-.badge {
-  background-color: #BCFCFF;
-  color: #285e61;
-  padding: 4px 12px;
-  border-radius: 16px;
-  font-size: 0.875rem;
-  font-weight: 600;
+.circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 75px; /* 동그라미의 너비 */
+  height: 75px; /* 동그라미의 높이 (너비와 같아야 함) */
+  background-color: #a8e4e3; /* 동그라미의 배경색 */
+  border-radius: 50%; /* 동그라미를 만드는 핵심 */
+  margin-left: 20px;
 }
 
 .group-title {
