@@ -31,7 +31,7 @@ const handleLogout = () => {
           <ButtonSmallColor>회원가입</ButtonSmallColor>
         </RouterLink>
         <ButtonSmallColor v-if="isLoggedIn" @click="handleLogout">로그아웃</ButtonSmallColor>
-
+        <RouterLink v-if="isLoggedIn" to = "/users/email" active-class="active">마이페이지</RouterLink>
       </nav>
     </div>
   </header>

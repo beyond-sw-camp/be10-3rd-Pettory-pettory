@@ -5,6 +5,7 @@ import HomeView from "@/views/common/HomeView.vue";
 import RegisterVerifyView from "@/views/user/RegisterVerifyView.vue";
 import WalkingRecordCalendar from "@/views/user/WalkingRecordCalendarView.vue";
 import WalkingRecordCalendarView from "@/views/user/WalkingRecordCalendarView.vue";
+import UserInfoView from "@/views/user/UserInfoView.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -39,8 +40,11 @@ const router = createRouter({
             props: route => ({
                 year: route.query.year,
                 month: route.query.month,
-                petId: route.query.petId
             }),
+        },
+        {
+            path: '/users/email',
+            component: UserInfoView
         },
     ]
 });
