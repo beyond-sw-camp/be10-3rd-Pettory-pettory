@@ -15,7 +15,7 @@ const props = defineProps({
 });
 
 // emit 정의
-const emit = defineEmits(['join']);
+const emit = defineEmits(['info']);
 
 </script>
 
@@ -38,7 +38,7 @@ const emit = defineEmits(['join']);
       </div>
       <!-- 작성일 -->
       <div class="card-right-content">
-        <ButtonSmallColor class="group-join-button" @click="emit('join')" :group="group" v-if="buttonVisible">참가
+        <ButtonSmallColor class="group-join-button" @click="emit('info')" v-if="buttonVisible">참가
         </ButtonSmallColor>
         <span class="group-date">작성일: {{ group.date }}</span>
       </div>

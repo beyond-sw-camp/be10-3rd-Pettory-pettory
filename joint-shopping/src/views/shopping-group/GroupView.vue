@@ -1,56 +1,112 @@
 <script setup>
-import { ref } from 'vue';
+import {reactive, ref} from 'vue';
 import BackButton from "@/components/common/BackButton.vue";
 import ButtonSmallColor from "@/components/common/ButtonSmallColor.vue";
 import ButtonLongColor from "@/components/common/ButtonLongColor.vue";
+import GroupUserList from "@/components/shopping-group/GroupUserList.vue";
+import {useRouter} from "vue-router";
 
-const members = ref([
-  { name: '본인' },
-  { name: '닉네임 123' },
-  { name: '닉네임 123' },
-  { name: '닉네임 123' },
-]);
+// 상태 관리를 위한 반응형 객체 생성
+const state = reactive({
+  groups: [
+    {
+      id: 1,
+      title: '강아지 사료 공동구매 하실분 구해요!',
+      item: '몽이있는 사료',
+      participants: 10,
+      price: 10000,
+      maxParticipants: 100,
+      date: '2000-01-01',
+      img: "@/assets/프로젝트.png",
+      contents: "강아지 사료 사실분 구합니다."
+    },
+    {
+      id: 2,
+      title: '사료 공동구매 하실분 구해요!',
+      item: '몽이있는 사료',
+      participants: 10,
+      price: 10000,
+      maxParticipants: 100,
+      date: '2000-01-01',
+      img: "@/assets/프로젝트.png",
+      contents: "강아지 사료 사실분 구합니다.@@@@@@@@@@@@@@@@@@@@@@@@@"
+    },
+    {
+      id: 3,
+      title: '사료 공동구매 하실분 구해요!',
+      item: '몽이있는 사료',
+      participants: 10,
+      price: 10000,
+      maxParticipants: 100,
+      date: '2000-01-01',
+      img: "@/assets/프로젝트.png",
+      contents: "강아지 사료 사실분 구합니다.@@@@@@@@@@@@@@@@@@@@@@@@@"
+    }
+  ],
+  users: [
+    {id: 1, name: '본인'},
+    {id: 2, name: '닉네임 123'},
+    {id: 3, name: '닉네임 123'},
+    {id: 4, name: '닉네임 123'},
+    {id: 5, name: '닉네임 123'},
+    {id: 6, name: '닉네임 123'},
+    {id: 7, name: '닉네임 123'},
+    {id: 8, name: '닉네임 123'},
+    {id: 9, name: '닉네임 123'},
+  ]
+});
+
+// 현재 모임방 유저 데이터 백엔드에서 받기
+// 라우터에서 모임방 데이터 객체 인자를 받아옴
+
+const router = useRouter();
+const goToGroupEdit = (id) => {
+  router.push(`/shoppinggroup/${id}/edit`);
+}
+
 </script>
 
 <template>
   <div class="group-container">
-    <div class="left-section">
-<!--  라우터로 인자를 받아옴    -->
-      <BackButton />
+    <section class="left-section">
+      <BackButton/>
       <div class="header">
         <h1 class="group-title">모임방입당</h1>
       </div>
-      <div class="status">
-        <span>현재 10 / 100 명</span>
-        <div class="circle">
-          <span>참가가능</span>
+      <div class="status-div">
+        <div>
+          <div class="status">
+            <span>현재 10 / 100 명</span>
+            <div class="circle">
+              <span>참가가능</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="purchase-info">
+<!--      지금 2번 수정페이지로, 특정페이지 이동 필요      -->
+            <ButtonSmallColor @click="goToGroupEdit(state.groups[1].id)" >모임방 수정</ButtonSmallColor>
+            <p>물품명: 맛있는 강아지 사료</p>
+            <p>공동구매비용: 10000원</p>
+          </div>
         </div>
       </div>
-      <div class="purchase-info">
-        <p>물품명: 맛있는 강아지 사료</p>
-        <p>공동구매비용: 10000원</p>
-      </div>
-      <!--   이후는 다 컴포넌트 -->
-      <div class="member-list">
-        <h3>회원 목록</h3>
 
-        <div v-for="(member, index) in members" :key="index" class="member-item">
-          <span>{{ member.name }}</span>
-          <button class="info-btn">정보보기</button>
-        </div>
-      </div>
+
+      <!--   이후는 다 컴포넌트 -->
+      <GroupUserList :users="state.users"/>
 
       <div class="button-div">
-        <ButtonSmallColor >나가기</ButtonSmallColor>
+        <ButtonSmallColor>나가기</ButtonSmallColor>
         <div class="button-right-div">
           <ButtonSmallColor class="left-button">구매 참가</ButtonSmallColor>
-          <ButtonSmallColor class="right-button" >참가자 목록</ButtonSmallColor>
+          <ButtonSmallColor class="right-button">참가자 목록</ButtonSmallColor>
         </div>
       </div>
-    </div>
-    <div class="right-section">
+    </section>
+    <section class="right-section">
       <div class="chat-box">채팅</div>
-    </div>
+    </section>
   </div>
 </template>
 
@@ -73,6 +129,13 @@ const members = ref([
   width: 50%;
   display: flex;
   justify-content: center;
+  align-items: center;
+}
+
+.status-div{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -120,28 +183,6 @@ const members = ref([
   flex-direction: column;
   align-items: flex-end;
 }
-
-.member-list {
-  border: 1px solid #53D9C1;
-  padding: 10px;
-  max-height: 300px;
-  overflow-y: auto;
-  border-radius: 10px;
-}
-
-.member-item {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.info-btn {
-  background-color: #a8e4e3;
-  border: none;
-  padding: 5px;
-  border-radius: 5px;
-}
-
 
 .button-div {
   margin-top: 10px;

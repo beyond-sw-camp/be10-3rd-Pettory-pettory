@@ -30,7 +30,7 @@ const router = useRouter();
   <main class="shopping-group-create">
     <div class="text-center">
       <BackButton/>
-      <h2>모임방 생성</h2>
+      <h2>모임방 수정</h2>
       <GroupForm @submit="handleProductCreate" />
     </div>
   </main>

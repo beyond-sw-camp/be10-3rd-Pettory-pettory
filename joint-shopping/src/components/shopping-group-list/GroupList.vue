@@ -13,10 +13,10 @@ const props = defineProps({
   }
 });
 
-// 선택한 그룹의 참가 모달창 띄움
+// 선택한 그룹의 정보 모달창 띄움
 const isModalVisible = ref(false);
 const selectedGroup = ref(null);
-const joinGroupModal = (group) => {
+const groupInfo = (group) => {
   selectedGroup.value = group;
   isModalVisible.value = true;
 }
@@ -35,8 +35,9 @@ const goToGroup = (id) => {
 
 <template>
   <div class="container">
-      <GroupItem v-for="group in groups" :key="group.id"  :group="group" @join="joinGroupModal(group)" />
-      <GroupDetailModal :group="selectedGroup" @join="goToGroup(selectedGroup.id)" @close="closeModal" :isVisible="isModalVisible"/>
+    <GroupItem v-for="group in groups" :key="group.id" :group="group" @info="groupInfo(group)"/>
+    <GroupDetailModal :group="selectedGroup" :isVisible="isModalVisible" @join="goToGroup(selectedGroup.id)"
+                      @close="closeModal"/>
   </div>
 </template>
 

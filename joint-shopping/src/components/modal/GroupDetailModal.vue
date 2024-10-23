@@ -5,7 +5,6 @@ import GroupItem from "@/components/shopping-group-list/GroupItem.vue";
 import BackButton from "@/components/common/BackButton.vue";
 
 const buttonVisible = false;
-
 // props 정의
 const props = defineProps({
   group: {
@@ -52,7 +51,6 @@ const closeModal = () => {
     <div class="modal-footer">
       <ButtonSmallColor @click="emit('join')" >모임방 참가</ButtonSmallColor>
     </div>
-
   </div>
 </template>
 
