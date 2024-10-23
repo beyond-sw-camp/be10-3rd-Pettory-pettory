@@ -1,5 +1,5 @@
 <script setup>
-import {reactive, ref} from 'vue';
+import {onMounted, reactive, ref} from 'vue';
 import SearchBar from "@/components/shopping-group-list/SearchBar.vue";
 import BackButton from "@/components/common/BackButton.vue";
 import {useRouter} from "vue-router";
@@ -10,46 +10,68 @@ import ButtonLongColor from "@/components/common/ButtonLongColor.vue";
 // 상태 관리를 위한 반응형 객체 생성
 const state = reactive({
   groups: [
-    {
-      id: 1,
-      title: '강아지 사료 공동구매 하실분 구해요!',
-      item: '몽이있는 사료',
-      participants: 10,
-      price: 10000,
-      maxParticipants: 100,
-      date: '2000-01-01',
-      img: "@/assets/프로젝트.png",
-      contents: "강아지 사료 사실분 구합니다."
-    },
-    {
-      id: 2,
-      title: '사료 공동구매 하실분 구해요!',
-      item: '몽이있는 사료',
-      participants: 10,
-      price: 10000,
-      maxParticipants: 100,
-      date: '2000-01-01',
-      img: "@/assets/프로젝트.png",
-      contents: "강아지 사료 사실분 구합니다.@@@@@@@@@@@@@@@@@@@@@@@@@"
-    },
-    {
-      id: 3,
-      title: '사료 공동구매 하실분 구해요!',
-      item: '몽이있는 사료',
-      participants: 10,
-      price: 10000,
-      maxParticipants: 100,
-      date: '2000-01-01',
-      img: "@/assets/프로젝트.png",
-      contents: "강아지 사료 사실분 구합니다.@@@@@@@@@@@@@@@@@@@@@@@@@"
-    }
+    // {
+    //   id: 1,
+    //   title: '강아지 사료 공동구매 하실분 구해요!',
+    //   item: '몽이있는 사료',
+    //   participants: 10,
+    //   price: 10000,
+    //   maxParticipants: 100,
+    //   date: '2000-01-01',
+    //   img: "@/assets/프로젝트.png",
+    //   contents: "강아지 사료 사실분 구합니다."
+    // },
+    // {
+    //   id: 2,
+    //   title: '사료 공동구매 하실분 구해요!',
+    //   item: '몽이있는 사료',
+    //   participants: 10,
+    //   price: 10000,
+    //   maxParticipants: 100,
+    //   date: '2000-01-01',
+    //   img: "@/assets/프로젝트.png",
+    //   contents: "강아지 사료 사실분 구합니다.@@@@@@@@@@@@@@@@@@@@@@@@@"
+    // },
+    // {
+    //   id: 3,
+    //   title: '사료 공동구매 하실분 구해요!',
+    //   item: '몽이있는 사료',
+    //   participants: 10,
+    //   price: 10000,
+    //   maxParticipants: 100,
+    //   date: '2000-01-01',
+    //   img: "@/assets/프로젝트.png",
+    //   contents: "강아지 사료 사실분 구합니다.@@@@@@@@@@@@@@@@@@@@@@@@@"
+    // }
   ],
   currentPage: 1,
   totalPages: 1,
   totalItems: 0,
-  categoryCode: null,
-  productName: ''
+  categoryNum: null,
+  groupName: '',
+  products: ''
 });
+
+// API 호출 함수
+const fetchGroups = async (page = 1) => {
+  try {
+    const response = await axios.get(`http://localhost:8080/jointshopping/groups`, {
+      params: {
+        page,
+        categoryNum: state.categoryNum || null,
+        groupName: state.groupName || null,
+        products: state.products || null
+      }
+    });
+    console.log(response);
+    state.groups = response.data.groupList;
+    state.currentPage = response.data.currentPage;
+    state.totalPages = response.data.totalPages;
+    state.totalItems = response.data.totalItems;
+  } catch (error) {
+    console.error('상품 목록을 불러오는 중 에러가 발생했습니다:', error);
+  }
+};
 
 // 검색 조건이 변경될 때마다 API 호출
 const onSearch = (searchParams) => {
@@ -62,6 +84,8 @@ const goToGroupCreate = () => {
   router.push('/shoppinggroup/create');
 }
 
+// 컴포넌트 마운트 시 제품 목록 로드
+onMounted(() => fetchGroups());
 </script>
 
 <template>
