@@ -31,16 +31,16 @@ const emit = defineEmits(['info']);
         </div>
         <!-- 모임 설명 -->
         <div>
-          <p class="group-title">{{ group.title }}</p>
-          <p class="group-details">물품: <strong>{{ group.item }}</strong> | 참가 수: {{ group.participants }}명</p>
-          <p class="group-details">가격: {{ group.price }}원 | 최대인원: {{ group.maxParticipants }}명</p>
+          <p class="group-title">{{ group.jointShoppingGroupName }}</p>
+          <p class="group-details">물품: <strong>{{ group.jointShoppingProducts }}</strong> | 최대 참가자 수: {{ group.jointShoppingParticipationMaximumCount }}명</p>
+          <p class="group-details">가격: {{ group.jointShoppingCost }}원 | 최대 인원 수: {{ group.jointShoppingGroupMaximumCount }}명</p>
         </div>
       </div>
       <!-- 작성일 -->
       <div class="card-right-content">
         <ButtonSmallColor class="group-join-button" @click="emit('info')" v-if="buttonVisible">참가
         </ButtonSmallColor>
-        <span class="group-date">작성일: {{ group.date }}</span>
+        <span class="group-date">작성일: {{ group.jointShoppingGroupInsertDatetime }}</span>
       </div>
     </div>
   </section>
@@ -50,6 +50,7 @@ const emit = defineEmits(['info']);
 /* 일반 CSS 사용 */
 .group-list {
   margin-top: 24px;
+  width: 100%;
 }
 
 .group-card {

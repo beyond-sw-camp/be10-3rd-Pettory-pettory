@@ -31,24 +31,27 @@ const closeModal = () => {
 
 <template>
   <!-- 모달이 보일 때만 렌더링 -->
-  <div v-if="isVisible" class="modal-overlay" >
+  <div v-if="isVisible" class="modal-overlay">
+    <div class="modal-content">
+      <back-button @click="closeModal"/>
 
-    <back-button @click="closeModal" />
+      <section class="top-section">
+        <GroupItem :group="group" :buttonVisible=false />
+      </section>
 
-    <GroupItem :group="group" :buttonVisible=false />
-
-    <div class="group-content">
-      <div class="card-left-content">
-        <img :src="group.img" :alt="없넹">
+      <div class="group-content">
+        <div class="card-left-content">
+          <img :src="group.jointShoppingProductsFileDirectory" alt="없넹">
+        </div>
+        <div class="card-right-content">
+          <p>{{ group.jointShoppingInfo }}</p>
+        </div>
       </div>
-      <div class="card-right-content">
-        <span>{{ group.contents }}</span>
-      </div>
-    </div>
 
-    <!-- 참가 버튼 -->
-    <div class="modal-footer">
-      <ButtonSmallColor @click="emit('join')" >모임방 참가</ButtonSmallColor>
+      <!-- 참가 버튼 -->
+      <div class="modal-footer">
+        <ButtonSmallColor @click="emit('join')">모임방 참가</ButtonSmallColor>
+      </div>
     </div>
   </div>
 </template>
@@ -65,6 +68,28 @@ const closeModal = () => {
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  flex-direction: column;
+}
+
+.modal-content {
+  border: 1px solid #53D9C1;
+  border-radius: 10px;
+  align-items: center;
+  background-color: #FFFFFF;
+  padding: 50px;
+  width: 700px;
+  height: 100%;
+}
+
+.top-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #53D9C1;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 20px;
 }
 
 /* 일반 CSS 사용 */
@@ -84,12 +109,24 @@ const closeModal = () => {
 .card-left-content {
   display: flex;
   align-items: center;
-  gap: 16px;
+  border: 1px solid #53D9C1;
+  background-color: #fff;
+  border-radius: 10px;
+  height: 200px;
+  margin: 10px;
+  padding: 10px;
+  flex : 1;
 }
 
 .card-right-content {
   display: flex;
-  align-items: center;
+  border: 1px solid #53D9C1;
+  background-color: #fff;
+  border-radius: 10px;
+  height: 200px;
+  margin: 10px;
+  padding: 10px;
+  flex : 2;
 }
 
 /* 모달 푸터 (액션 버튼들) */

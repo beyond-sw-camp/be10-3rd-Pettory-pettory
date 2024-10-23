@@ -6,44 +6,15 @@ import {useRouter} from "vue-router";
 import GroupList from "@/components/shopping-group-list/GroupList.vue";
 import ButtonSmallColor from "@/components/common/ButtonSmallColor.vue";
 import ButtonLongColor from "@/components/common/ButtonLongColor.vue";
+import {useAuthStore} from "@/stores/auth.js";
+import axios from "axios";
+
+
+const authStore = useAuthStore();
 
 // 상태 관리를 위한 반응형 객체 생성
 const state = reactive({
-  groups: [
-    // {
-    //   id: 1,
-    //   title: '강아지 사료 공동구매 하실분 구해요!',
-    //   item: '몽이있는 사료',
-    //   participants: 10,
-    //   price: 10000,
-    //   maxParticipants: 100,
-    //   date: '2000-01-01',
-    //   img: "@/assets/프로젝트.png",
-    //   contents: "강아지 사료 사실분 구합니다."
-    // },
-    // {
-    //   id: 2,
-    //   title: '사료 공동구매 하실분 구해요!',
-    //   item: '몽이있는 사료',
-    //   participants: 10,
-    //   price: 10000,
-    //   maxParticipants: 100,
-    //   date: '2000-01-01',
-    //   img: "@/assets/프로젝트.png",
-    //   contents: "강아지 사료 사실분 구합니다.@@@@@@@@@@@@@@@@@@@@@@@@@"
-    // },
-    // {
-    //   id: 3,
-    //   title: '사료 공동구매 하실분 구해요!',
-    //   item: '몽이있는 사료',
-    //   participants: 10,
-    //   price: 10000,
-    //   maxParticipants: 100,
-    //   date: '2000-01-01',
-    //   img: "@/assets/프로젝트.png",
-    //   contents: "강아지 사료 사실분 구합니다.@@@@@@@@@@@@@@@@@@@@@@@@@"
-    // }
-  ],
+  groups: [],
   currentPage: 1,
   totalPages: 1,
   totalItems: 0,
@@ -55,7 +26,11 @@ const state = reactive({
 // API 호출 함수
 const fetchGroups = async (page = 1) => {
   try {
+    const token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqaGhAbmF2ZXIuY29tIiwiYXV0aCI6WyJST0xFX1VTRVIiXSwiZXhwIjoxNzMwMjczNjI5fQ.iIBnjCH6a0dgwrxORntXBEKlnSIV1V1UORP7OViWT-yNzSpmUEkzWWm8Zpug06m1d7asZMVjU5R52hYANKVpiw";
     const response = await axios.get(`http://localhost:8080/jointshopping/groups`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       params: {
         page,
         categoryNum: state.categoryNum || null,
@@ -63,7 +38,7 @@ const fetchGroups = async (page = 1) => {
         products: state.products || null
       }
     });
-    console.log(response);
+    console.log(response.data);
     state.groups = response.data.groupList;
     state.currentPage = response.data.currentPage;
     state.totalPages = response.data.totalPages;
@@ -73,10 +48,13 @@ const fetchGroups = async (page = 1) => {
   }
 };
 
+
 // 검색 조건이 변경될 때마다 API 호출
 const onSearch = (searchParams) => {
-  state.groups.title = searchParams.searchData;
-  // fetchProducts(1);  // 페이지를 1로 초기화하고 다시 호출 // 검색 기능 라우터 이후에 구현 악시오스 이용
+  state.categoryNum = searchParams.categoryNum;
+  state.groupName = searchParams.groupName;
+  state.products = searchParams.products;
+  fetchGroups(1);  // 페이지를 1로 초기화하고 다시 호출
 };
 
 const router = useRouter();

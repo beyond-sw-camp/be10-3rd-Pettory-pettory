@@ -17,7 +17,7 @@ const state = reactive({
       price: 10000,
       maxParticipants: 100,
       date: '2000-01-01',
-      img: "@/assets/프로젝트.png",
+      img: "@/assets/1.png",
       contents: "강아지 사료 사실분 구합니다."
     },
     {
@@ -28,7 +28,7 @@ const state = reactive({
       price: 10000,
       maxParticipants: 100,
       date: '2000-01-01',
-      img: "@/assets/프로젝트.png",
+      img: "@/assets/1.png",
       contents: "강아지 사료 사실분 구합니다.@@@@@@@@@@@@@@@@@@@@@@@@@"
     },
     {
@@ -39,7 +39,7 @@ const state = reactive({
       price: 10000,
       maxParticipants: 100,
       date: '2000-01-01',
-      img: "@/assets/프로젝트.png",
+      img: "@/assets/1.png",
       contents: "강아지 사료 사실분 구합니다.@@@@@@@@@@@@@@@@@@@@@@@@@"
     }
   ],
