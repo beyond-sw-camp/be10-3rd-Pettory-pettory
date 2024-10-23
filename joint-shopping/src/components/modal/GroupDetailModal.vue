@@ -4,7 +4,6 @@ import ButtonSmallColor from "@/components/common/ButtonSmallColor.vue";
 import GroupItem from "@/components/shopping-group-list/GroupItem.vue";
 import BackButton from "@/components/common/BackButton.vue";
 
-const buttonVisible = false;
 // props 정의
 const props = defineProps({
   group: {
@@ -36,7 +35,7 @@ const closeModal = () => {
 
     <back-button @click="closeModal" />
 
-    <GroupItem :group="group" :buttonVisible="buttonVisible" />
+    <GroupItem :group="group" :buttonVisible=false />
 
     <div class="group-content">
       <div class="card-left-content">

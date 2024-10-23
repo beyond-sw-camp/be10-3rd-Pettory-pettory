@@ -8,6 +8,10 @@ const props = defineProps({
   users: {
     type: Array,
     required: true
+  },
+  isParticipation: {  // 참가자 목록인지 모임 회원 목록인지
+    type: Boolean,
+    default: false,
   }
 });
 
@@ -28,11 +32,11 @@ const closeModal = () => {
 
 <template>
   <div class="user-list">
-    <div class="user-title-div">
+    <div class="user-title-div" v-if="!isParticipation">
       <h2>회원 목록</h2>
     </div>
     <div class="container">
-      <GroupUserItem v-for="user in users" :key="user.id" :user="user" @info="userInfo(user)"/>
+      <GroupUserItem v-for="user in users" :key="user.id" :user="user" :isParticipation="isParticipation" @info="userInfo(user)"/>
       <UserInfoModal :user="selectedUser" :isVisible="isModalVisible" @close="closeModal"/>
     </div>
   </div>
@@ -42,7 +46,7 @@ const closeModal = () => {
 .user-list {
   border: 1px solid #53D9C1;
   padding: 20px;
-  max-height: 300px;
+  max-height: 500px;
   overflow-y: auto;
   border-radius: 10px;
   text-align: center;

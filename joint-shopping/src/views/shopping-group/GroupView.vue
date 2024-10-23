@@ -63,6 +63,9 @@ const router = useRouter();
 const goToGroupEdit = (id) => {
   router.push(`/shoppinggroup/${id}/edit`);
 }
+const goToGroupParticipation = (id) => {
+  router.push(`/shoppinggroup/${id}/participation`);
+}
 
 </script>
 
@@ -83,15 +86,14 @@ const goToGroupEdit = (id) => {
           </div>
         </div>
         <div>
-          <div class="purchase-info">
-<!--      지금 2번 수정페이지로, 특정페이지 이동 필요      -->
-            <ButtonSmallColor @click="goToGroupEdit(state.groups[1].id)" >모임방 수정</ButtonSmallColor>
+          <div class="group-edit">
+            <!--      지금 2번 수정페이지로, 특정페이지 이동 필요      -->
+            <ButtonSmallColor @click="goToGroupEdit(state.groups[1].id)">모임방 수정</ButtonSmallColor>
             <p>물품명: 맛있는 강아지 사료</p>
             <p>공동구매비용: 10000원</p>
           </div>
         </div>
       </div>
-
 
       <!--   이후는 다 컴포넌트 -->
       <GroupUserList :users="state.users"/>
@@ -100,7 +102,8 @@ const goToGroupEdit = (id) => {
         <ButtonSmallColor>나가기</ButtonSmallColor>
         <div class="button-right-div">
           <ButtonSmallColor class="left-button">구매 참가</ButtonSmallColor>
-          <ButtonSmallColor class="right-button">참가자 목록</ButtonSmallColor>
+          <ButtonSmallColor class="right-button" @click="goToGroupParticipation(state.groups[1].id)">참가자 목록
+          </ButtonSmallColor>
         </div>
       </div>
     </section>
@@ -132,7 +135,7 @@ const goToGroupEdit = (id) => {
   align-items: center;
 }
 
-.status-div{
+.status-div {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -177,7 +180,7 @@ const goToGroupEdit = (id) => {
   margin-left: 20px;
 }
 
-.purchase-info {
+.group-edit {
   margin-bottom: 10px;
   display: flex;
   flex-direction: column;
@@ -185,7 +188,7 @@ const goToGroupEdit = (id) => {
 }
 
 .button-div {
-  margin-top: 10px;
+  margin-top: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;

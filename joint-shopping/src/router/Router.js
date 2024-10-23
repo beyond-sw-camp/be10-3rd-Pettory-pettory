@@ -4,6 +4,7 @@ import GroupListView from "@/views/shopping-group/GroupListView.vue";
 import GroupView from "@/views/shopping-group/GroupView.vue";
 import GroupEditView from "@/views/shopping-group/GroupEditView.vue";
 import GroupCreateView from "@/views/shopping-group/GroupCreateView.vue";
+import GroupParticipationView from "@/views/shopping-group/GroupParticipationView.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -27,6 +28,10 @@ const router = createRouter({
         {
             path: '/shoppinggroup/:id/edit',
             component: GroupEditView
+        },
+        {
+            path: '/shoppinggroup/:id/participation',
+            component: GroupParticipationView
         },
     ]
 });
