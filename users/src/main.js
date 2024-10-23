@@ -1,9 +1,12 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from "@/router/router.js"
-
-// common 컴포넌트 자동 전역 등록
+import VCalendar from 'v-calendar';
+import {createPinia} from "pinia";
 
 const app = createApp(App);
+const pinia = createPinia();
+app.use(VCalendar, {componentPrefix: 'v'});
+app.use(pinia);
 app.use(router);
 app.mount("#app");

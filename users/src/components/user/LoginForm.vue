@@ -7,11 +7,15 @@ const email = ref('');
 const pwd = ref('');
 const errorMessage = ref('');
 
+const emit = defineEmits(['submit']);
+
+
 const handleLogin = () => {
   if (!email.value || !pwd.value) {
     errorMessage.value = '이메일과 비밀번호를 입력하세요.';
   } else {
-    errorMessage.value = 'else';
+    errorMessage.value = '';
+    emit('submit', {email: email.value, password: pwd.value})
   }
 };
 </script>
