@@ -16,6 +16,7 @@ const authStore = useAuthStore();
 const state = reactive({
   groups: [],
   bookmarks: [],
+  participationGroups: [],
   currentPage: 1,
   totalPages: 1,
   totalItems: 0,
@@ -41,14 +42,13 @@ const fetchGroups = async (page = 1) => {
     });
 
     console.log(response.data);
-    console.log(state.groupName);
     state.groups = response.data.groupList;
     state.currentPage = response.data.currentPage;
     state.totalPages = response.data.totalPages;
     state.totalItems = response.data.totalItems;
 
   } catch (error) {
-    console.error('상품 목록을 불러오는 중 에러가 발생했습니다:', error);
+    console.error('에러가 발생했습니다:', error);
   }
 };
 
@@ -70,12 +70,14 @@ const fetchUserGroups = async (page = 1) => {
 
     console.log(response.data);
     state.groups = response.data.groupList;
+    state.participationGroups = response.data.groupList.map(item => item.jointShoppingGroupNum);
     state.currentPage = response.data.currentPage;
     state.totalPages = response.data.totalPages;
     state.totalItems = response.data.totalItems;
+    console.log(state.participationGroups);
 
   } catch (error) {
-    console.error('상품 목록을 불러오는 중 에러가 발생했습니다:', error);
+    console.error('에러가 발생했습니다:', error);
   }
 };
 
@@ -101,7 +103,7 @@ const fetchBookmarks = async (page = 1) => {
     console.log(state.bookmarks);
 
   } catch (error) {
-    console.error('상품 목록을 불러오는 중 에러가 발생했습니다:', error);
+    console.error('에러가 발생했습니다:', error);
   }
 };
 
@@ -175,7 +177,7 @@ const goToGroupCreate = () => {
   router.push('/shoppinggroup/create');
 }
 
-// 컴포넌트 마운트 시 제품 목록 로드
+// 컴포넌트 마운트 시 목록 로드
 onMounted(() => {
   fetchUserGroups();
   fetchGroups();
@@ -190,7 +192,8 @@ onMounted(() => {
       <h2>{{ range === 'entire' ? '전체 모임방 목록' : (range === 'participation' ? '참가하신 모임방 목록' : '즐겨찾기 된 모임방 목록') }}</h2>
     </div>
     <SearchBar @search="onSearch"/>
-    <GroupList :groups="state.groups" :bookmarks="state.bookmarks" :range="range" @check="handleBookmarkCheck"/>
+    <GroupList :groups="state.groups" :bookmarks="state.bookmarks" :participationGroups="state.participationGroups"
+               :range="range" @check="handleBookmarkCheck"/>
     <div class="button-div">
       <div>
         <ButtonLongColor v-if="range !== 'bookmark'" @click="rangeBookmark">즐겨찾기 모임방</ButtonLongColor>

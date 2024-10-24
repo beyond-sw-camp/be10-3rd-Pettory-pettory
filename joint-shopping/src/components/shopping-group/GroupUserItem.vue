@@ -9,6 +9,10 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  isMaster:{
+    type: Boolean,
+    required: true
+  },
   isParticipation: {  // 참가자 목록인지 모임 회원 목록인지
     type: Boolean,
     default: false,
@@ -16,19 +20,19 @@ const props = defineProps({
 });
 
 // emit 정의
-const emit = defineEmits(['info']);
+const emit = defineEmits(['info', 'withdrawal']);
 
 </script>
 
 <template>
   <div class="user-item">
-    <span>{{ user.name }}</span>
+    <span>{{ user.userNickname }}</span>
     <div v-if="isParticipation">
-      <ButtonLongColor class="info-btn" >강퇴</ButtonLongColor>
+      <ButtonLongColor v-if="isMaster" class="info-btn" @click="emit('withdrawal')" >강퇴</ButtonLongColor>
       <ButtonLongColor class="info-btn" @click="emit('info')" >정보보기</ButtonLongColor>
     </div>
     <div v-else>
-      <ButtonSmallColor class="info-btn" >강퇴</ButtonSmallColor>
+      <ButtonSmallColor v-if="!isMaster" class="info-btn" @click="emit('withdrawal')" >강퇴</ButtonSmallColor>
       <ButtonSmallColor class="info-btn" @click="emit('info')" >정보보기</ButtonSmallColor>
     </div>
   </div>

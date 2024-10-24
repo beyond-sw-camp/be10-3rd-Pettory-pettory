@@ -3,10 +3,15 @@
 import GroupUserItem from "@/components/shopping-group/GroupUserItem.vue";
 import {ref} from "vue";
 import UserInfoModal from "@/components/modal/UserInfoModal.vue";
+import ModalSmall from "@/components/common/ModalSmall.vue";
 
 const props = defineProps({
-  users: {
+  userList: {
     type: Array,
+    required: true
+  },
+  isMaster:{
+    type: Boolean,
     required: true
   },
   isParticipation: {  // 참가자 목록인지 모임 회원 목록인지
@@ -16,17 +21,27 @@ const props = defineProps({
 });
 
 // 선택한 유저의 정보 모달창 띄움
-const isModalVisible = ref(false);
+const isUserModalVisible = ref(false);
+const isWithdrawalModalVisible = ref(false);
 const selectedUser = ref(null);
+
 const userInfo = (user) => {
   selectedUser.value = user;
-  isModalVisible.value = true;
+  isUserModalVisible.value = true;
+}
+const userWithdrawal = (user) => {
+  selectedUser.value = user;
+  isWithdrawalModalVisible.value = true;
 }
 
 // 뒤로가기로 나가기
-const closeModal = () => {
-  isModalVisible.value = false;
+const closeInfoModal = () => {
+  isUserModalVisible.value = false;
 }
+const closeWithdrawalModal = () => {
+  isWithdrawalModalVisible.value = false;
+}
+
 
 </script>
 
@@ -36,8 +51,10 @@ const closeModal = () => {
       <h2>회원 목록</h2>
     </div>
     <div class="container">
-      <GroupUserItem v-for="user in users" :key="user.id" :user="user" :isParticipation="isParticipation" @info="userInfo(user)"/>
-      <UserInfoModal :user="selectedUser" :isVisible="isModalVisible" @close="closeModal"/>
+      <GroupUserItem v-for="user in userList" :key="user.userId" :user="user" :isMaster="isMaster"
+                     :isParticipation="isParticipation" @info="userInfo(user)" @withdrawal="userWithdrawal(user)"/>
+      <UserInfoModal :user="selectedUser" :isVisible="isUserModalVisible" @close="closeInfoModal"/>
+      <ModalSmall :isVisible="isWithdrawalModalVisible" @close="closeWithdrawalModal"/>
     </div>
   </div>
 </template>

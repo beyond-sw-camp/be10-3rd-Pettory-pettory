@@ -29,9 +29,9 @@ const closeModal = () => {
 
 <template>
   <!-- 모달이 보일 때만 렌더링 -->
-  <div v-if="isVisible" class="modal-overlay" >
+  <div v-if="isVisible" class="modal-overlay" @click.self="closeModal">
 
-    <back-button @click="closeModal" />
+    <back-button :isModal=true @click="closeModal" />
 
 <!-- 한명의 유저의 정보를 자세히 보는 컴포넌트 필요  -->
     <div>

@@ -1,11 +1,26 @@
 <script setup>
-import { useRouter } from 'vue-router'; // Vue Router 훅을 불러옴
+import { useRouter } from 'vue-router';
+import {defineProps} from "vue"; // Vue Router 훅을 불러옴
+
+const props = defineProps({
+  isModal: {
+    type: Boolean,
+    default: false,  // 모달인지 아닌지
+  },
+});
+
+// emit 정의
+const emit = defineEmits(['close']);
 
 const router = useRouter(); // router 인스턴스 생성
 
 // 뒤로가기 함수
 const goBack = () => {
-  router.back(); // 이전 페이지로 이동
+  if(props.isModal) {
+    emit('close');
+  }else{
+    router.back(); // 이전 페이지로 이동
+  }
 };
 </script>
 

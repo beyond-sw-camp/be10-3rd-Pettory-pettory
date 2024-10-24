@@ -1,65 +1,76 @@
 <script setup>
-import {reactive, ref} from 'vue';
+import {onMounted, reactive, ref} from 'vue';
 import BackButton from "@/components/common/BackButton.vue";
 import ButtonSmallColor from "@/components/common/ButtonSmallColor.vue";
 import ButtonLongColor from "@/components/common/ButtonLongColor.vue";
 import GroupUserList from "@/components/shopping-group/GroupUserList.vue";
-import {useRouter} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
+import {useAuthStore} from "@/stores/auth.js";
+import axios from "axios";
+
+const authStore = useAuthStore();
+
+// 라우터로 온 데이터 받기
+const route = useRoute();
 
 // 상태 관리를 위한 반응형 객체 생성
 const state = reactive({
-  groups: [
-    {
-      id: 1,
-      title: '강아지 사료 공동구매 하실분 구해요!',
-      item: '몽이있는 사료',
-      participants: 10,
-      price: 10000,
-      maxParticipants: 100,
-      date: '2000-01-01',
-      img: "@/assets/1.png",
-      contents: "강아지 사료 사실분 구합니다."
-    },
-    {
-      id: 2,
-      title: '사료 공동구매 하실분 구해요!',
-      item: '몽이있는 사료',
-      participants: 10,
-      price: 10000,
-      maxParticipants: 100,
-      date: '2000-01-01',
-      img: "@/assets/1.png",
-      contents: "강아지 사료 사실분 구합니다.@@@@@@@@@@@@@@@@@@@@@@@@@"
-    },
-    {
-      id: 3,
-      title: '사료 공동구매 하실분 구해요!',
-      item: '몽이있는 사료',
-      participants: 10,
-      price: 10000,
-      maxParticipants: 100,
-      date: '2000-01-01',
-      img: "@/assets/1.png",
-      contents: "강아지 사료 사실분 구합니다.@@@@@@@@@@@@@@@@@@@@@@@@@"
-    }
-  ],
-  users: [
-    {id: 1, name: '본인'},
-    {id: 2, name: '닉네임 123'},
-    {id: 3, name: '닉네임 123'},
-    {id: 4, name: '닉네임 123'},
-    {id: 5, name: '닉네임 123'},
-    {id: 6, name: '닉네임 123'},
-    {id: 7, name: '닉네임 123'},
-    {id: 8, name: '닉네임 123'},
-    {id: 9, name: '닉네임 123'},
-  ]
+  group: [],
+  isMaster: false,
+  userList : [],
+  totalUsers: 0,
 });
 
 // 현재 모임방 유저 데이터 백엔드에서 받기
-// 라우터에서 모임방 데이터 객체 인자를 받아옴
+// 현재 그룹 정보도 백엔드에서 받자
+
+// API 호출 함수 / 현재 모임방
+const fetchGroup = async () => {
+  try {
+    const token = authStore.accessToken;
+    const groupNum = route.params.id;
+
+    const response = await axios.get(`http://localhost:8080/jointshopping/groups/${groupNum}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    console.log(response.data);
+    state.group = response.data.group;
+    state.isMaster = response.data.isMaster;
+
+  } catch (error) {
+    console.error('에러가 발생했습니다:', error);
+  }
+};
+
+// API 호출 함수 / 현재 모임방 있는 사용자들
+const fetchGroupUsers = async () => {
+  try {
+    const token = authStore.accessToken;
+    const groupNum = route.params.id;
+
+    const response = await axios.get(`http://localhost:8080/jointshopping/groups/users/${groupNum}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    console.log(response.data);
+    state.userList = response.data.groupUserList;
+    state.totalUsers = response.data.totalItems;
+
+  } catch (error) {
+    console.error('상품 목록을 불러오는 중 에러가 발생했습니다:', error);
+  }
+};
+
+// 강퇴 axios api 필요
+// 나가기 axios api 필요
 
 const router = useRouter();
+
 const goToGroupEdit = (id) => {
   router.push(`/shoppinggroup/${id}/edit`);
 }
@@ -67,6 +78,11 @@ const goToGroupParticipation = (id) => {
   router.push(`/shoppinggroup/${id}/participation`);
 }
 
+// 컴포넌트 마운트 시 제품 목록 로드
+onMounted(() => {
+  fetchGroup();
+  fetchGroupUsers();
+});
 </script>
 
 <template>
@@ -74,12 +90,12 @@ const goToGroupParticipation = (id) => {
     <section class="left-section">
       <BackButton/>
       <div class="header">
-        <h1 class="group-title">모임방입당</h1>
+        <h1 class="group-title">{{ state.group.jointShoppingGroupName }}</h1>
       </div>
       <div class="status-div">
         <div>
           <div class="status">
-            <span>현재 10 / 100 명</span>
+            <span>현재 {{ state.userList.length }} / {{ state.group.jointShoppingGroupMaximumCount }} 명</span>
             <div class="circle">
               <span>참가가능</span>
             </div>
@@ -88,20 +104,22 @@ const goToGroupParticipation = (id) => {
         <div>
           <div class="group-edit">
             <!--      지금 2번 수정페이지로, 특정페이지 이동 필요      -->
-            <ButtonSmallColor @click="goToGroupEdit(state.groups[1].id)">모임방 수정</ButtonSmallColor>
-            <p>물품명: 맛있는 강아지 사료</p>
-            <p>공동구매비용: 10000원</p>
+            <ButtonSmallColor v-if="state.isMaster" @click="goToGroupEdit(state.groups[1].id)">모임방 수정</ButtonSmallColor>
+            <p>물품명: {{ state.group.jointShoppingProducts }}</p>
+            <p>공동구매비용: {{ state.group.jointShoppingCost }}</p>
           </div>
         </div>
       </div>
 
       <!--   이후는 다 컴포넌트 -->
-      <GroupUserList :users="state.users"/>
+      <GroupUserList :userList="state.userList" :isMaster="state.isMaster" />
 
       <div class="button-div">
-        <ButtonSmallColor>나가기</ButtonSmallColor>
+        <div>
+          <ButtonSmallColor v-if="state.isMaster">나가기</ButtonSmallColor>
+        </div>
         <div class="button-right-div">
-          <ButtonSmallColor class="left-button">구매 참가</ButtonSmallColor>
+          <ButtonSmallColor v-if="state.isMaster" class="left-button">구매 참가</ButtonSmallColor>
           <ButtonSmallColor class="right-button" @click="goToGroupParticipation(state.groups[1].id)">참가자 목록
           </ButtonSmallColor>
         </div>

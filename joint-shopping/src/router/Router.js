@@ -19,7 +19,7 @@ const router = createRouter({
         },
         {
             path: '/shoppinggroup/:id',
-            component: GroupView
+            component: GroupView,
         },
         {
             path: '/shoppinggroup/create',

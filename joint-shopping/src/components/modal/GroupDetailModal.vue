@@ -14,6 +14,10 @@ const props = defineProps({
     type: Array,
     required: true
   },
+  range:{
+    type: String,
+    required: true
+  },
   isVisible: Boolean, // 모달 표시 여부
 
   isClosable: {
@@ -40,12 +44,12 @@ const emitCheck = (groupNum, isActive, newBookmarks) => {
 
 <template>
   <!-- 모달이 보일 때만 렌더링 -->
-  <div v-if="isVisible" class="modal-overlay">
+  <div v-if="isVisible" class="modal-overlay" @click.self="closeModal">
     <div class="modal-content">
-      <back-button @click="closeModal"/>
+      <back-button :isModal=true @click="closeModal"/>
 
       <section class="top-section">
-        <GroupItem :group="group" :bookmarks="bookmarks" :buttonVisible=false @check="emitCheck" />
+        <GroupItem :group="group" :bookmarks="bookmarks" :range="range" :buttonVisible=false @check="emitCheck" />
       </section>
 
       <div class="group-content">

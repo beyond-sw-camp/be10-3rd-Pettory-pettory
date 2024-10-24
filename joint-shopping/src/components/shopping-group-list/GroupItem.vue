@@ -13,6 +13,10 @@ const props = defineProps({
     type: Array,
     required: true
   },
+  range:{
+    type: String,
+    required: true
+  },
   buttonVisible: {
     type: Boolean,
     default: true,
@@ -71,7 +75,8 @@ const toggleClass = (groupNum) => {
       </div>
       <!-- 작성일 -->
       <div class="card-right-content">
-        <ButtonSmallColor class="group-join-button" @click="emit('info')" v-if="buttonVisible">참가
+        <ButtonSmallColor class="group-join-button" @click="emit('info')" v-if="buttonVisible">
+          {{ (range === 'participation' ) ? '입장' : '참가' }}
         </ButtonSmallColor>
         <span class="group-date">작성일: {{ group.jointShoppingGroupInsertDatetime }}</span>
           <svg :class="isBookmark(group.jointShoppingGroupNum) ? 'active-icon' : 'non-active-icon'"
