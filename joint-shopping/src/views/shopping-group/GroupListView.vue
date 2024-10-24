@@ -8,6 +8,7 @@ import ButtonSmallColor from "@/components/common/ButtonSmallColor.vue";
 import ButtonLongColor from "@/components/common/ButtonLongColor.vue";
 import {useAuthStore} from "@/stores/auth.js";
 import axios from "axios";
+import PagingBar from "@/components/shopping-group-list/PagingBar.vue";
 
 const authStore = useAuthStore();
 
@@ -40,6 +41,7 @@ const fetchGroups = async (page = 1) => {
     });
 
     console.log(response.data);
+    console.log(state.groupName);
     state.groups = response.data.groupList;
     state.currentPage = response.data.currentPage;
     state.totalPages = response.data.totalPages;
@@ -142,18 +144,31 @@ const rangeToggle = () => {
   }
 }
 
+// 즐겨찾기 조회 클릭 시마다 API 호출
 const rangeBookmark = () => {
   range.value = "bookmark";
   fetchBookmarks(1);
 }
 
 // 검색 조건이 변경될 때마다 API 호출
-const onSearch = (searchParams) => {
-  state.categoryNum = searchParams.categoryNum;
-  state.groupName = searchParams.groupName;
-  state.products = searchParams.products;
+const onSearch = (searchData) => {
+  state.groupName = searchData;
+  state.products = searchData;
   fetchGroups(1);  // 페이지를 1로 초기화하고 다시 호출
 };
+
+// 페이지 수정
+const changePage = (page) => {
+
+  if (range.value === 'participation') {
+    fetchUserGroups(page);  // 페이지를 1로 초기화하고 다시 호출
+  } else if (range.value === 'entire') {
+    fetchGroups(page);  // 페이지를 1로 초기화하고 다시 호출
+  } else if (range.value === 'bookmark'){
+    fetchBookmarks(page);
+  }
+}
+
 
 const router = useRouter();
 const goToGroupCreate = () => {
@@ -178,7 +193,7 @@ onMounted(() => {
     <GroupList :groups="state.groups" :bookmarks="state.bookmarks" :range="range" @check="handleBookmarkCheck"/>
     <div class="button-div">
       <div>
-        <ButtonLongColor v-if="range !== 'bookmark'"  @click="rangeBookmark">즐겨찾기 모임방</ButtonLongColor>
+        <ButtonLongColor v-if="range !== 'bookmark'" @click="rangeBookmark">즐겨찾기 모임방</ButtonLongColor>
       </div>
       <div class="button-right-div">
         <ButtonSmallColor class="left-button" @click="rangeToggle">{{
@@ -188,6 +203,13 @@ onMounted(() => {
         <ButtonSmallColor class="right-button" @click="goToGroupCreate">모임방 생성</ButtonSmallColor>
       </div>
     </div>
+    <!-- 페이지네이션 컴포넌트 -->
+    <PagingBar
+        :currentPage="state.currentPage"
+        :totalPages="state.totalPages"
+        :totalItems="state.totalItems"
+        @pageChanged="changePage"
+    />
   </main>
 </template>
 
