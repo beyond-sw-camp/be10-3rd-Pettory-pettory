@@ -2,17 +2,29 @@
 import ChangePasswordForm from "@/components/user/ChangePasswordForm.vue";
 import axios from "axios";
 import {useRouter} from "vue-router";
+import {useAuthStore} from "@/stores/auth.js";
 
 const router = useRouter();
+// Pinia 스토어
+const authStore = useAuthStore();
 
 const handleChangePasswordSubmit = async ({curPwd, newPwd}) => {
   try {
+    const token = authStore.accessToken;
+    if(!token) return;
+
+
+
     const ChangePasswordRequest = {
       currentUserPassword: curPwd,
       newUserPassword: newPwd
     };
 
-    const response = await axios.put('http://localhost:8080/users/passwords', ChangePasswordRequest);
+    const response = await axios.put('http://localhost:8080/users/passwords', ChangePasswordRequest, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     if (response.status === 200) {
       router.push('/login');

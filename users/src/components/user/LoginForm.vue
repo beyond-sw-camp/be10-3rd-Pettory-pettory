@@ -60,7 +60,7 @@ const handleLogin = () => {
     </div>
 
     <div class="actions">
-      <RouterLink to="/users/passwords">비밀번호 찾기</RouterLink>
+      <RouterLink to="/users/passwords/emails">비밀번호 찾기</RouterLink>
       <RouterLink to="/users">회원가입</RouterLink>
     </div>
 
