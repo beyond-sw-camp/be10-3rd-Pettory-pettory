@@ -6,6 +6,8 @@ import FindPasswordForm from "@/components/user/FindPasswordForm.vue";
 
 const router = useRouter();
 const userEmail = ref('');
+const errorMessage = ref('');
+
 
 const handleFindPasswordSubmit = async (email) => {
   try {
@@ -21,7 +23,13 @@ const handleFindPasswordSubmit = async (email) => {
     }
 
   } catch (error) {
-    console.log('오류: ', error);
+    // 서버에서 전송된 에러 메세지 추출
+    if (error.response.data.message) {
+      errorMessage.value = error.response.data.message;
+    } else {
+      errorMessage.value = '다시 시도해주세요';
+      console.log('이메일 전송 실패', error);
+    }
   }
 };
 
@@ -29,7 +37,7 @@ const handleFindPasswordSubmit = async (email) => {
 
 <template>
   <div class="find-password-view">
-    <FindPasswordForm @submit="handleFindPasswordSubmit" />
+    <FindPasswordForm @submit="handleFindPasswordSubmit" :errorMessage="errorMessage" />
     <RouterView />
   </div>
 </template>
