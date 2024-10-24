@@ -23,10 +23,10 @@ const fetchUserData = async () => {
   }
 };
 
-// const handleLogout = () => {
-//   authStore.logout();
-//   router.push('/');
-// };
+const handleLogout = () => {
+  authStore.logout();
+  router.push('/');
+};
 
 onMounted(() => {
   fetchUserData();
@@ -35,9 +35,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="user-profile-container">
+  <div class="user-profile-container" v-if="userData">
     <h2>{{ userData.userNickname }} 님의 회원 정보</h2>
-    <div class="user-info-boxcd">
+    <div class="user-info-box">
       <div class="user-info-item">
         <label>이메일</label>
         <span>{{ userData.userEmail }}</span>
@@ -59,6 +59,9 @@ onMounted(() => {
         <span>{{ userData.userWalkingRecordPublicYn ? '공개' : '비공개' }}</span>
       </div>
     </div>
+  </div>
+  <div v-else>
+    <p>회원정보 불러오는 중</p>
   </div>
 </template>
 
