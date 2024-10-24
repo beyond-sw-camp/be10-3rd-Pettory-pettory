@@ -2,14 +2,16 @@
 import WalkingGroupForm from "@/walkinggroup/components/WalkingGroupForm.vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
+import {useAuthStore} from "@/stores/auth.js";
 
 const router = useRouter();
+const authStore = useAuthStore();
 
 const handleWalkingGroupCreate = async (formData) => {
   try {
     await axios.post("http://localhost:8080/api/walking-group/", formData, {
       headers: {
-        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${authStore.accessToken}`,
       },
     });
 
@@ -20,10 +22,12 @@ const handleWalkingGroupCreate = async (formData) => {
 };
 </script>
 
-<template class="container">
-  <div class="content">
-    <h1>산책 모임 생성</h1>
-    <WalkingGroupForm @submit="handleWalkingGroupCreate"/>
+<template>
+  <div  class="container">
+    <div class="content">
+      <h1>산책 모임 생성</h1>
+      <WalkingGroupForm @submit="handleWalkingGroupCreate"/>
+    </div>
   </div>
 </template>
 
@@ -33,7 +37,6 @@ const handleWalkingGroupCreate = async (formData) => {
   flex-direction: column; /* 자식 요소를 수직으로 쌓기 */
   align-items: center; /* 수평으로 중앙 정렬 */
   justify-content: center; /* 수직으로 중앙 정렬 */
-  background-color: #f5f5f5;
 }
 .content {
   display: flex;

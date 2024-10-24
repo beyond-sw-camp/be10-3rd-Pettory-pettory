@@ -6,6 +6,7 @@ import PagingBar from "@/common/PagingBar.vue";
 import SearchBar from "@/common/SearchBar.vue";
 import { useRouter } from "vue-router";
 import ButtonSmallColor from "@/common/ButtonSmallColor.vue";
+import {useAuthStore} from "@/stores/auth.js";
 
 const state = reactive({
   walkinggroups: [],
@@ -16,16 +17,21 @@ const state = reactive({
   walkingGroupInfo: ''
 });
 
+const authStore = useAuthStore();
+
 const fetchWalkingGroups = async (page = 1) => {
   try {
     const response = await axios.get(`http://localhost:8080/api/walking-group/all`, {
+      headers: {
+        Authorization: `Bearer ${authStore.accessToken}`
+      },
       params: {
         page,
         walkingGroupName: state.walkingGroupName || null,
         walkingGroupInfo: state.walkingGroupInfo || null,
       }
     });
-    state.walkinggroups = response.data.walkinggroups;
+    state.walkinggroups = response.data.walkingGroups;
     state.currentPage = response.data.currentPage;
     state.totalPages = response.data.totalPages;
     state.totalItems = response.data.totalItems;

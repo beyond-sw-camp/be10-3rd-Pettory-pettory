@@ -10,7 +10,7 @@ const props = defineProps({
 <template>
   <div class="walking-group-detail">
     <h1>{{ walkingGroup.walkingGroupName }}</h1>
-    <h3 class="justify-content-end">{{ walkingGroup.walkingGroupOwner }}</h3>
+    <h3 class="justify-content-end">{{ walkingGroup.userName }}</h3>
     <p>{{ walkingGroup.walkingGroupInfo }}</p>
     <p>{{ walkingGroup.walkingGroupMaxiumCount }}</p>
   </div>

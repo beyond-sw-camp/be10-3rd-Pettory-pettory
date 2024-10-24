@@ -19,7 +19,7 @@ const gotoWalkingGroupDetail = (id) => {
   <div class="item" @click="gotoWalkingGroupDetail(walkingGroup.walkingGroupId)">
     <div class="walkingGroup-details">
       <p class="walkingGroup-name">{{ walkingGroup.walkingGroupName }}</p>
-      <P class="walkingGroup-owner">{{ walkingGroup.walkingGroupOwner }}</P>
+      <p class="walkingGroup-userName">{{ walkingGroup.userName }}</p>
       <p class="walkingGroup-info">{{ walkingGroup.walkingGroupInfo }}</p>
       <p class="walkingGroup-maximumCount">{{ walkingGroup.walkingGroupMaximumCount }}</p>
     </div>
@@ -30,13 +30,14 @@ const gotoWalkingGroupDetail = (id) => {
 .item {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  width: 40%;
+  width: 80%;
   padding: 20px;
-  border: 1px solid #ccc;
+  margin: 10px;
+  border: 1px solid #53D9C1;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   background-color: #fff;
+  text-align: left;
 }
 
 .item:hover {
@@ -46,7 +47,7 @@ const gotoWalkingGroupDetail = (id) => {
   flex: 1;
 }
 
-.walkingGroup-name, .walkingGroup-owner, .walkingGroup-info, .walkingGroup-maximumCount {
+.walkingGroup-name, .walkingGroup-userName, .walkingGroup-info, .walkingGroup-maximumCount {
   margin: 5px 0;
 }
 </style>

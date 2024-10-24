@@ -75,7 +75,7 @@ const isFormValid = computed(() => {
   align-items: center;
   width: 40%;
   padding: 20px;
-  border: 1px solid #ccc;
+  border: 1px solid #53D9C1;
   border-radius: 10px;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
   background-color: #fff;
