@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue';
 
 // 어디서든 사용할 수 있는 useAuthStore
 export const useAuthStore = defineStore('auth', () => {
-    const accessToken = ref(null);
+    const accessToken = ref("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqaGhAbmF2ZXIuY29tIiwiYXV0aCI6WyJST0xFX1VTRVIiXSwiZXhwIjoxNzMwMjczNjI5fQ.iIBnjCH6a0dgwrxORntXBEKlnSIV1V1UORP7OViWT-yNzSpmUEkzWWm8Zpug06m1d7asZMVjU5R52hYANKVpiw");
     const userRole = ref(null);
 
     // 페이지가 로드될 때 localStorage 에서 토큰을 읽어와 상태를 초기화한다.

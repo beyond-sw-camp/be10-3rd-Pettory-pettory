@@ -10,6 +10,10 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  bookmarks: {
+    type: Array,
+    required: true
+  },
   isVisible: Boolean, // 모달 표시 여부
 
   isClosable: {
@@ -19,12 +23,17 @@ const props = defineProps({
 });
 
 // emit 정의
-const emit = defineEmits(['close', 'join']);
+const emit = defineEmits(['close', 'join', 'check']);
 
 const closeModal = () => {
   if (props.isClosable) {
     emit('close');
   }
+};
+
+// 부모 컴포넌트로 검색 이벤트 전달
+const emitCheck = (groupNum, isActive, newBookmarks) => {
+  emit('check', groupNum, isActive, newBookmarks);
 };
 
 </script>
@@ -36,7 +45,7 @@ const closeModal = () => {
       <back-button @click="closeModal"/>
 
       <section class="top-section">
-        <GroupItem :group="group" :buttonVisible=false />
+        <GroupItem :group="group" :bookmarks="bookmarks" :buttonVisible=false @check="emitCheck" />
       </section>
 
       <div class="group-content">

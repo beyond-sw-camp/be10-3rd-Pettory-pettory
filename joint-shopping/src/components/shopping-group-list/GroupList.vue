@@ -1,7 +1,7 @@
 <script setup>
 
 import GroupItem from "@/components/shopping-group-list/GroupItem.vue";
-import {ref} from "vue";
+import {computed, ref} from "vue";
 import ModalSmall from "@/components/common/ModalSmall.vue";
 import GroupDetailModal from "@/components/modal/GroupDetailModal.vue";
 import {useRouter} from "vue-router";
@@ -10,15 +10,42 @@ const props = defineProps({
   groups: {
     type: Array,
     required: true
+  },
+  bookmarks: {
+    type: Array,
+    required: true
+  },
+  range:{
+    type: String,
+    required: true
   }
 });
 
-// 선택한 그룹의 정보 모달창 띄움
+// emit 정의
+const emit = defineEmits(['check']);
+
+// 부모 컴포넌트로 검색 이벤트 전달
+const emitCheck = (groupNum, isActive, newBookmarks) => {
+  emit('check', groupNum, isActive, newBookmarks);
+};
+
+// 배열이 비어 있는지 확인하는 computed 속성
+const isEmptyArray = computed(() => props.groups.length === 0);
+
+
+const router = useRouter();
+
+// 선택한 그룹의 정보 모달창 띄움 / 이미 참가했다면 바로 모임방으로 이동
 const isModalVisible = ref(false);
 const selectedGroup = ref(null);
 const groupInfo = (group) => {
-  selectedGroup.value = group;
-  isModalVisible.value = true;
+  if ( props.range === 'participation' || props.range === 'bookmark'){
+    router.push(`/shoppinggroup/${group.jointShoppingGroupNum}`);
+  }
+  else if ( props.range === 'entire'){
+    selectedGroup.value = group;
+    isModalVisible.value = true;
+  }
 }
 
 // 뒤로가기로 나가기
@@ -26,7 +53,6 @@ const closeModal = () => {
   isModalVisible.value = false;
 }
 
-const router = useRouter();
 const goToGroup = (id) => {
   router.push(`/shoppinggroup/${id}`);
 }
@@ -35,9 +61,16 @@ const goToGroup = (id) => {
 
 <template>
   <div class="container">
-    <GroupItem v-for="group in groups" :key="group.id" :group="group" @info="groupInfo(group)"/>
-    <GroupDetailModal :group="selectedGroup" :isVisible="isModalVisible" @join="goToGroup(selectedGroup.id)"
-                      @close="closeModal"/>
+    <div v-if="isEmptyArray" class="no-group-card">
+      <p>참가하신 공동구매 모임방이 없습니다.</p>
+    </div>
+    <template v-else>
+      <GroupItem v-for="group in groups" :key="group.jointShoppingGroupNum" :group="group" :bookmarks="bookmarks"
+                 @info="groupInfo(group)" @check="emitCheck"/>
+    </template>
+
+    <GroupDetailModal :group="selectedGroup" :isVisible="isModalVisible" :bookmarks="bookmarks"
+                      @join="goToGroup(selectedGroup.id)" @close="closeModal" />
   </div>
 </template>
 
@@ -45,5 +78,13 @@ const goToGroup = (id) => {
 .container {
   display: flex;
   flex-direction: column;
+  width: 100%;
+}
+
+.no-group-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 500px;
 }
 </style>

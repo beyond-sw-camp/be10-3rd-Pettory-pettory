@@ -2,11 +2,16 @@
 import {useRouter} from "vue-router";
 import ButtonLongColor from "@/components/common/ButtonLongColor.vue";
 import ButtonSmallColor from "@/components/common/ButtonSmallColor.vue";
+import {ref} from "vue";
 
 const props = defineProps({
   group: {
     type: Object,
     required: true,
+  },
+  bookmarks: {
+    type: Array,
+    required: true
   },
   buttonVisible: {
     type: Boolean,
@@ -15,7 +20,32 @@ const props = defineProps({
 });
 
 // emit 정의
-const emit = defineEmits(['info']);
+const emit = defineEmits(['info', 'check']);
+
+const newBookmarks = ref([...props.bookmarks]); // props로 받아온 bookmarks
+
+// 그룹이 즐겨찾기된 상태인지 확인하는 함수
+const isBookmark = (groupNum) => {
+  return newBookmarks.value.includes(groupNum);
+};
+
+// 즐겨찾기 토글 함수
+const toggleClass = (groupNum) => {
+  const isActive = ref(false);
+
+  if (isBookmark(groupNum)) {
+    // 즐겨찾기 해제: 해당 그룹 ID를 배열에서 제거
+    newBookmarks.value = newBookmarks.value.filter(id => id !== groupNum);
+    isActive.value = false;
+  } else {
+    // 즐겨찾기 추가: 해당 그룹 ID를 배열에 추가
+    newBookmarks.value.push(groupNum);
+    isActive.value = true;
+  }
+
+  // 북마크 추가
+  emit('check', groupNum, isActive.value, newBookmarks.value);
+};
 
 </script>
 
@@ -32,8 +62,11 @@ const emit = defineEmits(['info']);
         <!-- 모임 설명 -->
         <div>
           <p class="group-title">{{ group.jointShoppingGroupName }}</p>
-          <p class="group-details">물품: <strong>{{ group.jointShoppingProducts }}</strong> | 최대 참가자 수: {{ group.jointShoppingParticipationMaximumCount }}명</p>
-          <p class="group-details">가격: {{ group.jointShoppingCost }}원 | 최대 인원 수: {{ group.jointShoppingGroupMaximumCount }}명</p>
+          <p class="group-details">물품: <strong>{{ group.jointShoppingProducts }}</strong> | 최대 참가자 수:
+            {{ group.jointShoppingParticipationMaximumCount }}명</p>
+          <p class="group-details">가격: {{ group.jointShoppingCost }}원 | 최대 인원 수: {{
+              group.jointShoppingGroupMaximumCount
+            }}명</p>
         </div>
       </div>
       <!-- 작성일 -->
@@ -41,6 +74,14 @@ const emit = defineEmits(['info']);
         <ButtonSmallColor class="group-join-button" @click="emit('info')" v-if="buttonVisible">참가
         </ButtonSmallColor>
         <span class="group-date">작성일: {{ group.jointShoppingGroupInsertDatetime }}</span>
+          <svg :class="isBookmark(group.jointShoppingGroupNum) ? 'active-icon' : 'non-active-icon'"
+               @click="toggleClass(group.jointShoppingGroupNum)" >
+          <use xlink:href="#icon-bookmark">
+            <symbol id="icon-bookmark" viewBox="0 0 32 32">
+              <path d="M6 0v32l10-10 10 10v-32z"></path>
+            </symbol>
+          </use>
+        </svg>
       </div>
     </div>
   </section>
@@ -102,13 +143,29 @@ const emit = defineEmits(['info']);
   align-items: center;
 }
 
-.group-join-button {
-  margin-right: 25px;
-}
-
 .group-date {
   font-size: 0.875rem;
   color: #718096;
+  margin-right: 25px;
+  margin-left: 25px;
+}
+
+.non-active-icon {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  stroke-width: 1px;
+  stroke: #53D9C1;
+  fill: #ffffff;
+}
+
+.active-icon {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  stroke-width: 1px;
+  stroke: #53D9C1;
+  fill: #53D9C1; /* 활성화 시 색상 변경 */
 }
 
 </style>
