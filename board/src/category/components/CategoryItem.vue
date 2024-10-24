@@ -1,6 +1,6 @@
 <template>
   <div class="category-item">
-    <span class="category-name">{{ categoryName }}</span>
+    <span class="category-name">{{ categoryTitle }}</span>
     <div class="category-actions">
       <CategoryButton @click="$emit('edit')">카테고리 수정</CategoryButton>
       <CategoryButton @click="$emit('delete')">카테고리 삭제</CategoryButton>
@@ -14,7 +14,7 @@ import CategoryButton from '@/category/components/CategoryButton.vue';  // 커�
 
 export default defineComponent({
   props: {
-    categoryName: {
+    categoryTitle: {
       type: String,
       required: true
     }
