@@ -18,7 +18,9 @@ const handleLogout = () => {
   <header>
     <div class="wrapper">
       <nav>
-        <RouterLink to="/" active-class="active" replace>펫토리로고</RouterLink>
+        <RouterLink to="/" active-class="active" replace>
+          <img src="@/assets/image/펫토리아이콘.png" alt="펫토리 로고" />
+        </RouterLink>
         <a>산책모임</a>
         <a>공동구매</a>
         <a>게시판</a>
@@ -54,5 +56,17 @@ const handleLogout = () => {
     text-decoration: none;
     color: #333;
     padding: 10px 15px;
+  }
+
+  /* 이미지 스타일링 */
+  img {
+    width: 100px; /* 너비를 150px로 고정 */
+    height: auto; /* 비율을 유지하면서 높이 자동 조정 */
+  }
+
+  /* 반응형으로 조절하고 싶을 경우 */
+  img {
+    max-width: 100%; /* 부모 요소에 맞춰 최대 크기를 설정 */
+    height: auto; /* 높이를 자동으로 맞춤 */
   }
 </style>

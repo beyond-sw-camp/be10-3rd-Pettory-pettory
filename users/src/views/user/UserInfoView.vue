@@ -3,6 +3,7 @@ import {ref, onMounted} from "vue";
 import axios from 'axios';
 import {useAuthStore} from "@/stores/auth.js";
 import {useRouter} from "vue-router";
+import ButtonLongColor from "@/components/common/ButtonLongColor.vue";
 
 const authStore = useAuthStore();
 const userData = ref(null);
@@ -28,6 +29,10 @@ const handleLogout = () => {
   router.push('/');
 };
 
+const handleChangePasswordClick = () => {
+  router.push('/users/passwords')
+};
+
 onMounted(() => {
   fetchUserData();
 });
@@ -41,6 +46,10 @@ onMounted(() => {
       <div class="user-info-item">
         <label>이메일</label>
         <span>{{ userData.userEmail }}</span>
+      </div>
+      <div class="user-info-item">
+        <label>비밀번호</label>
+        <ButtonLongColor @click="handleChangePasswordClick">비밀번호 변경</ButtonLongColor>
       </div>
       <div class="user-info-item">
         <label>닉네임</label>
