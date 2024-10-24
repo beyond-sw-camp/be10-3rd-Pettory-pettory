@@ -1,0 +1,127 @@
+<template>
+  <div class="category-list-container">
+    <h1>게시글 카테고리 목록</h1>
+
+    <div class="category-list">
+      <CategoryItem
+          v-for="category in categories"
+          :key="category.id"
+          :categoryName="category.name"
+          @edit="openEditModal(category)"
+          @delete="openDeleteModal(category)"
+      />
+    </div>
+
+    <CategoryButton @click="openCreateModal" :buttonStyle="{ padding: '10px 25px', fontSize: '1.2rem' }">
+      카테고리 생성
+    </CategoryButton>
+
+
+    <!-- 수정 모달 -->
+    <UpdateCategoryModal
+        :show="isEditModalVisible"
+        :initialCategoryName="selectedCategoryName"
+        @edit="updateCategoryName"
+        @close="closeEditModal"
+    />
+
+    <!-- 삭제 확인 모달 -->
+    <DeleteCategoryModal
+        :show="isDeleteModalVisible"
+        @confirm-delete="deleteCategoryConfirmed"
+        @close="closeDeleteModal"
+    />
+
+    <!-- 카테고리 생성 모달 -->
+    <CreateCategoryModal
+        :show="isCreateModalVisible"
+        @create="createCategory"
+        @close="closeCreateModal"
+    />
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent } from 'vue';
+import CategoryItem from '../components/CategoryItem.vue';
+import CreateCategoryModal from '../modal/CreateCategoryModal.vue';
+import UpdateCategoryModal from "@/category/modal/UpdateCategoryModal.vue";
+import DeleteCategoryModal from "@/category/modal/DeleteCategoryModal.vue";
+import { useCategoryLogic } from '@/category/logic/CategoryListLogic.vue';
+import CategoryButton from "@/category/components/CategoryButton.vue"; // 로직 가져오기
+
+export default defineComponent({
+  components: {
+    CategoryButton,
+    DeleteCategoryModal,
+    UpdateCategoryModal,
+    CategoryItem,
+    CreateCategoryModal
+  },
+  setup() {
+    const {
+      categories,
+      isEditModalVisible,
+      isDeleteModalVisible,
+      isCreateModalVisible,
+      selectedCategoryName,
+      openEditModal,
+      closeEditModal,
+      updateCategoryName,
+      openDeleteModal,
+      closeDeleteModal,
+      deleteCategoryConfirmed,
+      openCreateModal,
+      closeCreateModal,
+      createCategory,
+      fetchCategoryDetail
+    } = useCategoryLogic();
+
+    return {
+      categories,
+      isEditModalVisible,
+      isDeleteModalVisible,
+      isCreateModalVisible,
+      selectedCategoryName,
+      openEditModal,
+      closeEditModal,
+      updateCategoryName,
+      openDeleteModal,
+      closeDeleteModal,
+      deleteCategoryConfirmed,
+      openCreateModal,
+      closeCreateModal,
+      createCategory,
+      fetchCategoryDetail
+    };
+  }
+});
+</script>
+
+<style scoped>
+.category-list-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.category-list {
+  max-height: 400px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+}
+
+
+
+
+/* 스크롤바 스타일 */
+.category-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.category-list::-webkit-scrollbar-thumb {
+  background-color: #66cccc;
+  border-radius: 10px;
+}
+</style>
