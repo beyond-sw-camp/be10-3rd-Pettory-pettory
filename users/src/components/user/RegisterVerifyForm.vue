@@ -13,7 +13,7 @@ const handleVerifyClick = () => {
     errorMessage.value = '인증코드를 입력해주세요.';
   } else {
     errorMessage.value = '';
-    emit('verify', verifyCode.value);
+    emit('submit', verifyCode.value);
   }
 };
 

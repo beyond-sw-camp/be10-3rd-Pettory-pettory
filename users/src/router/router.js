@@ -3,8 +3,12 @@ import LoginView from "@/views/user/LoginView.vue";
 import RegisterView from "@/views/user/RegisterView.vue";
 import HomeView from "@/views/common/HomeView.vue";
 import RegisterVerifyView from "@/views/user/RegisterVerifyView.vue";
-import WalkingRecordCalendar from "@/views/user/WalkingRecordCalendarView.vue";
 import WalkingRecordCalendarView from "@/views/user/WalkingRecordCalendarView.vue";
+import UserInfoView from "@/views/user/UserInfoView.vue";
+import RegisterSuccessView from "@/views/user/RegisterSuccessView.vue";
+import FindPasswordView from "@/views/user/FindPasswordView.vue";
+import ChangePasswordForm from "@/components/user/ChangePasswordForm.vue";
+// import FindPasswordView from "@/views/user/FindPasswordView.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -23,15 +27,14 @@ const router = createRouter({
         },
         {
             path: '/users/emails/codes',
-            component: RegisterVerifyView
+            component: RegisterVerifyView,
+            props: route => ({
+                verifyCode: route.query.verifyCode
+            }),
         },
         {
-            path: '/users/emails/codes/home',
-            component: RegisterVerifyView
-        },
-        {
-            path: '/users/emails/codes/home',
-            component: RegisterVerifyView
+            path: '/new-users',
+            component: RegisterSuccessView
         },
         {
             path: '/walking-records/summary',
@@ -39,9 +42,21 @@ const router = createRouter({
             props: route => ({
                 year: route.query.year,
                 month: route.query.month,
-                petId: route.query.petId
             }),
         },
+        {
+            path: '/users/email',
+            component: UserInfoView
+        },
+        {
+            path: '/users/passwords',
+            component: FindPasswordView
+        },
+        {
+            path: '/users/passwords',
+            component: ChangePasswordForm
+        },
+
     ]
 });
 

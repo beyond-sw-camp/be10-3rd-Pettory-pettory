@@ -1,6 +1,6 @@
 import {createRouter, createWebHashHistory, createWebHistory} from "vue-router";
-import CategoryList from "@/category/view/CategoryList.vue";
-import Board from "@/board/view/Board.vue"
+import CategoryList from "@/category/view/CategoryListView.vue";
+
 
 
 const router = createRouter( {
@@ -8,13 +8,33 @@ const router = createRouter( {
     routes : [
         {
             path : '/board',
-            name : 'board',
-            component: () => import('@/board/view/Board.vue')
+            name : 'Board',
+            component: () => import('@/board/view/BoardView.vue')
         },
         {
             path : '/board/category',
             name: 'CategoryList',
             component : CategoryList
+        },
+        {
+            path : '/board/post',
+            name: 'BoardPost',
+            component : () => import('@/board/view/BoardPostView.vue')
+        },
+        {
+            path : '/board/post/:id',
+            name : 'BoardPostDetail',
+            component : () => import('@/board/view/BoardPostVIew.vue')
+        },
+        {
+            path : '/',
+            name : 'Main',
+            component : () => import('@/main/view/MainView.vue')
+        },
+        {
+            path : '/board/post/new',
+            name : 'BoardPostCreate',
+            component : () => import('@/board/view/BoardPostCreateView.vue')
         }
     ]
 });

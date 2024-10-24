@@ -47,7 +47,7 @@ import CategoryItem from '../components/CategoryItem.vue';
 import CreateCategoryModal from '../modal/CreateCategoryModal.vue';
 import UpdateCategoryModal from "@/category/modal/UpdateCategoryModal.vue";
 import DeleteCategoryModal from "@/category/modal/DeleteCategoryModal.vue";
-import { useCategoryLogic } from '@/category/logic/CategoryListLogic.vue'
+import { useCategoryLogic } from '@/category/logic/CategoryListLogic.vue';
 import CategoryButton from "@/category/components/CategoryButton.vue"; // 로직 가져오기
 
 export default defineComponent({
@@ -73,7 +73,8 @@ export default defineComponent({
       deleteCategoryConfirmed,
       openCreateModal,
       closeCreateModal,
-      createCategory
+      createCategory,
+      fetchCategoryDetail
     } = useCategoryLogic();
 
     return {
@@ -90,7 +91,8 @@ export default defineComponent({
       deleteCategoryConfirmed,
       openCreateModal,
       closeCreateModal,
-      createCategory
+      createCategory,
+      fetchCategoryDetail
     };
   }
 });

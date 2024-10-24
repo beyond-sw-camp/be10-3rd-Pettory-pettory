@@ -4,9 +4,9 @@ import RegisterSuccessBox from "@/components/user/RegisterSuccessBox.vue";
 
 const router = useRouter();
 
-// 홈으로 이동
+// 로그인 화면으로 이동
 const handleHome = () => {
-  router.push('/');
+  router.push('/login');
 };
 </script>
 
@@ -18,5 +18,11 @@ const handleHome = () => {
 </template>
 
 <style scoped>
-
+.register-success-view {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f5f5f5;
+}
 </style>

@@ -24,6 +24,7 @@ const handleLoginSubmit = async (formData) => {
     if (response.status === 200) {
       // 헤더에서 토큰 추출
       authStore.login(response.headers.token);
+      console.log('response.headers.token:', response.headers.token);
 
       console.log('authStore.login 실행');
 

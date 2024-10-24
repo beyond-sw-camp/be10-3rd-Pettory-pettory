@@ -5,7 +5,7 @@
 
     <!-- 산책 모임 -->
     <div class="meetup-section">
-      <img src="@/assets/image/펫토리아이콘.png" alt="모임 이미지" class="meetup-image" />
+      <img src="@/header/image/펫토리아이콘.png" alt="모임 이미지" class="meetup-image" />
       <div class="meetup-content">
         <h2>다른 반려동물들과 함께 만들어 가는 산책 이야기</h2>
         <p>주변 반려동물과 함께 색다른 추억을 만드는 모임을 경험해 보세요</p>
@@ -27,13 +27,13 @@
           <button>공동구매</button>
         </div>
       </div>
-      <img src="@/assets/image/펫토리아이콘.png" alt="모임 이미지" class="buy-image" />
+      <img src="@/header/image/펫토리아이콘.png" alt="모임 이미지" class="buy-image" />
 
     </div>
 
     <!-- 게시판 -->
     <div class="board-section">
-      <img src="@/assets/image/펫토리아이콘.png" alt="모임 이미지" class="board-image" />
+      <img src="@/header/image/펫토리아이콘.png" alt="모임 이미지" class="board-image" />
       <div class="board-content">
         <h2>여러 사람들과 나누는 나의 이야기</h2>
         <p>나와 반려동물의 즐거운 추억을 다른 사람들과 공유해보세요</p>
@@ -57,7 +57,7 @@
           <button>상담</button>
         </div>
       </div>
-      <img src="@/assets/image/펫토리아이콘.png" alt="모임 이미지" class="counseling-image" />
+      <img src="@/header/image/펫토리아이콘.png" alt="모임 이미지" class="counseling-image" />
 
     </div>
   </div>
