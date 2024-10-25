@@ -1,34 +1,52 @@
 <script setup>
-import {computed, inject, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import {RouterLink} from "vue-router";
 import {useAuthStore} from "@/stores/auth.js";
 import router from "@/router/router.js";
+import {fetchUserInfo} from "@/util/FetchUserInfo.js";
+import ButtonSmallColor from "@/components/common/ButtonSmallColor.vue";
 
-const userName = ref('회원이름');
-const userEmail = ref('회원이메일@gmail.com');
+// fetchUserInfo 메소드에서 데이터 가져오기
+const { userInfo, fetchUserInfoData } = fetchUserInfo();
+
+// const userName = ref('회원이름');
+// const userEmail = ref('회원이메일@gmail.com');
 
 const authStore = useAuthStore();
 // accessToken 이 있으면 로그인한 상태
 const isLoggedIn = computed(() => !!authStore.accessToken);
+
 const handleLogout = () => {
   authStore.logout();
   router.push("/login");
 };
 
+// 마운트 시 회원 정보 가져오기
+onMounted(() => {
+  if (isLoggedIn.value) {
+    fetchUserInfoData();
+  }
+});
+
 </script>
 
 <template>
   <div class="side-menu-bar">
-    <div class="user-info">
-      <h3>{{ userName }} 님</h3>
-      <p>{{ userEmail }}</p>
+    <div v-if="isLoggedIn" class="user-info">
+      <h3>{{ userInfo?.userName}} 님</h3>
+      <p>{{ userInfo?.userEmail}}</p>
     </div>
-
+    <div v-else>
+      <RouterLink v-if="!isLoggedIn" to="/login" active-class="active" replace>
+        <h3>로그인 하기</h3>
+      </RouterLink>
+    </div>
+    
     <hr class="menu-divider" />
 
     <ul class="menu-list">
       
-      <li class="menu-item">
+      <li class="menu-item" v-if="isLoggedIn">
         <RouterLink to="/users/email" active-class="active">
           <img src="@/assets/image/account_circle.png" alt="icon" class="icon" />
           <span>내 정보 보기</span>
