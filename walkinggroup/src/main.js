@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import router from "@/walkinggroup/router/Router.js";
+import router from "@/router/Router.js";
 import BootstrapVue3 from "bootstrap-vue-3";
 import { createPinia } from "pinia";
 

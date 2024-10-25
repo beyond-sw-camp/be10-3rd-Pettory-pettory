@@ -1,13 +1,13 @@
 <script setup>
 import { ref, reactive, onMounted } from "vue";
-import WalkingGroupList from "@/walkingGroupAplication/components/WalkingGroupApplicationList.vue"
 import axios from "axios";
 import PagingBar from "@/common/PagingBar.vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth.js";
+import WalkingGroupApplicationList from "@/WalkingGroupApplication/components/WalkingGroupApplicationList.vue";
 
 const state = reactive({
-  walkinggroupApplications: [], // 수정된 변수명
+  walkingGroupApplications: [], // 수정된 변수명
   currentPage: 1,
   totalPages: 1,
   totalItems: 0,
@@ -20,6 +20,41 @@ const modalState = ref({
 
 const authStore = useAuthStore();
 
+const handleApplicationClick = async (walkingGroupApplicationId, action) => {
+  try {
+    const requestBody = {
+      walkingGroupApprovalState: action
+    };
+
+    console.log("요청 본문:", requestBody);
+
+    await axios.put(
+        `http://localhost:8080/api/walking-group-application/${walkingGroupApplicationId}`,
+        requestBody,
+        {
+          headers: {
+            Authorization: `Bearer ${authStore.accessToken}`,
+          },
+        }
+    );
+
+    console.log(walkingGroupApplications.value);
+
+    // 목록에서 신청서 제거
+    walkingGroupApplications.value = walkingGroupApplications.value.filter(
+        (app) => {
+          console.log(app.walkingGroupApplicationId);
+          console.log(walkingGroupApplicationId);
+          return app.walkingGroupApplicationId !== walkingGroupApplicationId
+        }
+    );
+    alert(action === "ACCEPT" ? "신청이 승인되었습니다." : "신청이 거절되었습니다.");
+
+  } catch (error) {
+    console.error("에러 발생:", error.response ? error.response.data : error.message);
+  }
+};
+
 const fetchWalkingGroupApplications = async (page = 1) => {
   try {
     const response = await axios.get(`http://localhost:8080/api/walking-group-application/all`, {
@@ -30,7 +65,7 @@ const fetchWalkingGroupApplications = async (page = 1) => {
         page,
       }
     });
-    state.walkinggroupApplications = response.data.walkingGroupApplications;
+    state.walkingGroupApplications = response.data.walkingGroupApplications;
     state.currentPage = response.data.currentPage;
     state.totalPages = response.data.totalPages;
     state.totalItems = response.data.totalItems;
@@ -48,13 +83,16 @@ onMounted(() => fetchWalkingGroupApplications());
   <div class="container">
     <h1>산책 모임 신청자 목록</h1>
     <div class="walk-list">
-      <WalkingGroupApplicationList :walkinggroupApplications="state.walkinggroupApplications" />
+      <WalkingGroupApplicationList :walkingGroupApplications="state.walkingGroupApplications"
+        @handleApplicationClick="handleApplicationClick"
+      />
       <PagingBar
           :currentPage="state.currentPage"
           :totalPages="state.totalPages"
           :totalItems="state.totalItems"
           @page-changed="fetchWalkingGroupApplications"
       />
+
     </div>
   </div>
 </template>

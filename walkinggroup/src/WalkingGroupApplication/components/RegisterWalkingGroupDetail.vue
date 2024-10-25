@@ -1,6 +1,6 @@
 <script setup>
 const props = defineProps({
-  walkingGroup: {
+  registerWalkingGroup: {
     type: Object,
     required: true
   }
@@ -9,9 +9,8 @@ const props = defineProps({
 
 <template>
   <div class="walking-group-detail">
-    <h1>{{ walkingGroup.walkingGroupName }}</h1>
-    <h3 class="justify-content-end">{{ walkingGroup.userName }}</h3>
-    <p>{{ walkingGroup.walkingGroupInfo }}</p>
+    <h1>{{ registerWalkingGroup.walkingGroupName }}</h1>
+    <h3 class="justify-content-end">{{ registerWalkingGroup.userName }}</h3>
   </div>
 </template>
 
