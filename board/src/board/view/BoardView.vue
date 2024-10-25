@@ -13,8 +13,10 @@
         </div>
           <!-- 카테고리 목록 -->
           <ul v-if="isCategoryListVisible" class="category-list">
-            <li v-for="category in categories" :key="category" @click="filterByCategory(category)">
-              {{ category }}
+            <li v-for="category in categories"
+                :key="category.categoryNum"
+                @click="filterByCategory(category.categoryTitle)">
+              {{ category.categoryTitle }}
             </li>
           </ul>
           <!-- 검색창과 검색 버튼 -->
@@ -77,10 +79,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue';
+import { defineComponent, ref, computed, onMounted } from 'vue';
+import axios from 'axios';
+import { useRouter } from 'vue-router';
 import BoardPagingBar from "@/board/components/BoardPagingBar.vue";
 import BoardButton from "@/board/components/BoardButton.vue";
-import {useRouter} from "vue-router";
 
 interface Post {
   category: string;
@@ -91,30 +94,31 @@ interface Post {
   thumbnail: string; // 썸네일 추가
 }
 
+interface Category {
+  categoryNum: number;
+  categoryTitle: string;
+}
+
 export default defineComponent({
   components: {
     BoardButton,
     BoardPagingBar
   },
   setup() {
-    const posts = ref<Post[]>(Array(120).fill().map((_, index) => ({
-      category: ['IT', '생활', '여행'][index % 3], // 다양한 카테고리 적용
-      title: `예시 제목 ${index + 1}`,
-      createdAt: '2024-10-10 17:10',
-      author: `작성자 ${index + 1}`,
-      views: `${20 + index * 5}`,
-      thumbnail: 'https://via.placeholder.com/150' // 예시 썸네일 이미지
-    })));
-
-    const categories = ref(['전체', 'IT', '생활', '여행']);  // 카테고리 목록
-    const selectedCategory = ref<string>('전체');  // 기본 선택된 카테고리: '전체'
-    const isCategoryListVisible = ref(false);  // 카테고리 목록 보이기/숨기기
-    const router = useRouter(); // router 인스턴스 사용
+    const posts = ref<Post[]>([]);
+    const categories = ref<Category[]>([]);  // 데이터베이스에서 가져올 카테고리 목록
+    const selectedCategory = ref<string>('전체');  // 기본 선택된 카테고리
+    const isCategoryListVisible = ref(false);
+    const router = useRouter();
     const currentPage = ref<number>(1);
-    const postsPerPage = ref<number>(6); // 한 페이지당 6개의 게시글
-    const totalPages = computed(() => Math.ceil(filteredPosts.value.length / postsPerPage.value));
-    const searchQuery = ref('');
+    const postsPerPage = ref<number>(6);
+    const searchQuery = ref<string>('');
     const startPage = ref<number>(1);
+
+
+    const totalPages = computed(() =>
+        Math.ceil(filteredPosts.value.length / postsPerPage.value)
+    );
 
     const visiblePages = computed(() => {
       const pages = [];
@@ -139,9 +143,28 @@ export default defineComponent({
       return filteredPosts.value.slice(start, end);
     });
 
+    // 카테고리 API에서 데이터 가져오기
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/board/categorys', {
+          headers: {
+            Authorization: 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJta0BuYXZlci5jb20iLCJhdXRoIjpbIlJPTEVfVVNFUiJdLCJleHAiOjE3MzAzMzU2MzR9.rY_B7TQAfq_4Ti0XcFN5gUC3BQPHFux57Id8pJ2qF2lTlr4pekMVyYcgDQ5IJNu8K-QlFdhWEGICPPB2bUOCoA',
+          },
+        });
+        categories.value = response.data.map((category: any) => ({
+          categoryNum: category.categoryNum,
+          categoryTitle: category.categoryTitle,
+        }));
+      } catch (error) {
+        console.error('카테고리 목록을 불러오는 중 오류 발생:', error);
+      }
+    };
+
     const goToPage = (page: number) => {
       currentPage.value = page;
     };
+
+
 
     const prevSet = () => {
       if (startPage.value > 1) {
@@ -180,6 +203,11 @@ export default defineComponent({
     const goToPost = (postId: number) => {
       router.push({ name: 'BoardPost', params: { id: postId } });
     };
+
+    // 컴포넌트가 마운트될 때 카테고리 데이터 가져오기
+    onMounted(() => {
+      fetchCategories();
+    });
 
 
     return {
