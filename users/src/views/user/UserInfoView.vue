@@ -5,24 +5,14 @@ import {useAuthStore} from "@/stores/auth.js";
 import {useRouter} from "vue-router";
 import ButtonLongColor from "@/components/common/ButtonLongColor.vue";
 
+import {fetchUserInfo} from "@/util/FetchUserInfo.js";
+
 const authStore = useAuthStore();
-const userData = ref(null);
+// const userData = ref(null);
 const router = useRouter();
 
-const fetchUserData = async () => {
-  try {
-    const token = authStore.accessToken;
-    const response = await axios.get('http://localhost:8080/users/email', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    userData.value = response.data.result;
-    console.log('response.data.result:', response.data.result);
-  } catch (error) {
-    console.error('사용자 정보 가져오기 실패', error);
-  }
-};
+// fetchUserInfo 메소드에서 데이터 가져오기
+const { userInfo, fetchUserInfoData } = fetchUserInfo();
 
 const handleLogout = () => {
   authStore.logout();
@@ -34,18 +24,18 @@ const handleChangePasswordClick = () => {
 };
 
 onMounted(() => {
-  fetchUserData();
+  fetchUserInfoData();
 });
 
 </script>
 
 <template>
-  <div class="user-profile-container" v-if="userData">
-    <h2>{{ userData.userNickname }} 님의 회원 정보</h2>
+  <div class="user-profile-container" v-if="userInfo">
+    <h2>{{ userInfo.userNickname }} 님의 회원 정보</h2>
     <div class="user-info-box">
       <div class="user-info-item">
         <label>이메일</label>
-        <span>{{ userData.userEmail }}</span>
+        <span>{{ userInfo.userEmail }}</span>
       </div>
       <div class="user-info-item">
         <label>비밀번호</label>
@@ -53,19 +43,19 @@ onMounted(() => {
       </div>
       <div class="user-info-item">
         <label>닉네임</label>
-        <span>{{ userData.userNickname }}</span>
+        <span>{{ userInfo.userNickname }}</span>
       </div>
       <div class="user-info-item">
         <label>이름</label>
-        <span>{{ userData.userName }}</span>
+        <span>{{ userInfo.userName }}</span>
       </div>
       <div class="user-info-item">
         <label>생일</label>
-        <span>{{ userData.userBirth }}</span>
+        <span>{{ userInfo.userBirth }}</span>
       </div>
       <div class="user-info-item">
         <label>산책정보공개</label>
-        <span>{{ userData.userWalkingRecordPublicYn ? '공개' : '비공개' }}</span>
+        <span>{{ userInfo.userWalkingRecordPublicYn ? '공개' : '비공개' }}</span>
       </div>
     </div>
   </div>

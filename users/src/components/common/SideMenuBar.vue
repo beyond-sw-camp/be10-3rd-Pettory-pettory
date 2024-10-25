@@ -9,9 +9,6 @@ import ButtonSmallColor from "@/components/common/ButtonSmallColor.vue";
 // fetchUserInfo 메소드에서 데이터 가져오기
 const { userInfo, fetchUserInfoData } = fetchUserInfo();
 
-// const userName = ref('회원이름');
-// const userEmail = ref('회원이메일@gmail.com');
-
 const authStore = useAuthStore();
 // accessToken 이 있으면 로그인한 상태
 const isLoggedIn = computed(() => !!authStore.accessToken);
