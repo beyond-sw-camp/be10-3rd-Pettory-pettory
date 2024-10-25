@@ -9,6 +9,13 @@ const errorMessage = ref('');
 
 const emit = defineEmits(['submit']);
 
+// 부모에게 errorMessage 받기
+const props = defineProps({
+  errorMessage: {
+    type: String,
+    default: ''
+  }
+});
 
 const handleLogin = () => {
   if (!email.value || !pwd.value) {
@@ -28,7 +35,7 @@ const handleLogin = () => {
       <h2>펫토리 로그인</h2>
 
       <!-- 에러 메세지 표시 -->
-      <p v-if="errorMessage" class="error">{{errorMessage}}</p>
+      <p v-if="props.errorMessage" class="error">{{props.errorMessage}}</p>
 
       <div class="field-group">
         <!-- 이메일 필드 -->
@@ -120,7 +127,7 @@ a:hover {
 }
 
 .error {
-  color: red;
-  margin-top: 10px;
+  color: #53D9C1;
+  font-weight: bold;
 }
 </style>

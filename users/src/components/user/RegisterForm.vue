@@ -1,5 +1,5 @@
 <script setup>
-import {computed, ref} from 'vue';
+import {ref} from 'vue';
 import InputBoxLongGray from '@/components/common/InputBoxLongGray.vue';
 import ButtonLongColor from "@/components/common/ButtonLongColor.vue";
 

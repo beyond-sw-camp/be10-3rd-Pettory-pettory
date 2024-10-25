@@ -32,8 +32,13 @@ const handleLoginSubmit = async (formData) => {
 
     }
   } catch (error) {
-    console.error("로그인 실패:", error);
-    errorMessage.value = '로그인 실패. 다시 시도해주세요.';
+    // 서버에서 전송된 에러 메세지 추출
+    if (error.response.data.message) {
+      errorMessage.value = error.response.data.message;
+    } else {
+      errorMessage.value = '다시 시도해주세요';
+      console.log('회원가입 실패: ', error);
+    }
   }
 };
 
@@ -41,7 +46,7 @@ const handleLoginSubmit = async (formData) => {
 
 <template>
   <div class="login-view">
-    <LoginForm @submit="handleLoginSubmit" />
+    <LoginForm @submit="handleLoginSubmit" :errorMessage="errorMessage"/>
     <RouterView />
   </div>
 </template>
