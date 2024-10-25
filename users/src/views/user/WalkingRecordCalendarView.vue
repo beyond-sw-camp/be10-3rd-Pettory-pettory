@@ -23,18 +23,6 @@ const selectedFilterType = ref('all');
 const totalDuration = ref(0); // 이달의 총 산책 시간
 const walkingRecords = ref([]); // 산책 기록
 
-const calendarAttributes = ref([]); // 캘린더에 날짜별로 색을 칠할 속성들
-
-// 색상 범위 계산 메소드
-const getColor = (duration) => {
-  if (duration === 0) return '#FFFFFF';
-  if (duration < 30) return '#A0FAEA';
-  if (duration < 60) return '#6EF0D9';
-  if (duration < 90) return '#53D9C1';
-  if (duration >= 120) return '#34B69F';
-  return '#34B69F';
-};
-
 // 산책 기록을 가져오는 메소드
 const fetchWalkingRecords = async () => {
   try {
@@ -60,21 +48,10 @@ const fetchWalkingRecords = async () => {
     // 선택된 반려동물의 총 산책 시간 계산
     calculateTotalDurationPerPet();
 
-    // 날짜별 색상 설정
-    updateCalendarAttributes();
 
   } catch (error) {
     console.error('산책 기록을 불러오는 중 에러가 발생했습니다:', error);
   }
-};
-
-// 날짜 형식을 YYYY-MM-DD로 맞추는 메소드
-const formatDate = (dateStr) => {
-  const date = new Date(dateStr);
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
 };
 
 // 선택된 반려동물의 총 산책 시간을 계산하는 함수
@@ -84,32 +61,6 @@ const calculateTotalDurationPerPet = () => {
       .reduce((sum, record) => sum + record.walkingRecordDuration, 0); // 합산
 };
 
-// 날짜별 색상 업데이트
-// const updateCalendarAttributes = () => {
-//   const newAttributes = walkingRecords.value.map(record => ({
-//     dates: formatDate(record.walkingRecordDate),  // 날짜 형식 맞추기
-//     customData: { duration: record.walkingRecordDuration },
-//     highlight: {
-//       backgroundColor: getColor(record.walkingRecordDuration),
-//       contentStyle: { color: '#000000' }, // 텍스트 색상
-//     }
-//   }));
-//   console.log('newAttributes:', newAttributes);
-//   calendarAttributes.value = newAttributes;
-// };
-
-const updateCalendarAttributes = () => {
-  const newAttributes = walkingRecords.value.map(record => ({
-    key: record.walkingRecordDate, // 각 record에 고유 key를 추가합니다
-    dates: new Date(record.walkingRecordDate), // 날짜 형식 설정
-    customData: { duration: record.walkingRecordDuration }, // 산책 시간 데이터 추가
-    highlight: {
-      backgroundColor: getColor(record.walkingRecordDuration), // 산책 시간에 따라 배경색 결정
-      contentClass: { color: '#000000' }, // 텍스트 색상
-    }
-  }));
-  calendarAttributes.value = newAttributes; // 달력 속성 설정
-};
 
 // 선택된 반려동물이 변경되었을 때 호출되는 함수
 const handlePetChange = () => {
@@ -173,7 +124,6 @@ watch(selectedPet, handlePetChange);
     <v-calendar
         is-expanded
         :weekdays="['월', '화', '수', '목', '금', '토', '일']"
-        :attributes="calendarAttributes"
         @month-changed="changeDate"
     />
 

@@ -1,5 +1,4 @@
 <script setup>
-import {ref} from 'vue';
 import {defineEmits, defineProps} from "vue";
 
 // props 정의

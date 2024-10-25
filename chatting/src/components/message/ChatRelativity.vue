@@ -1,9 +1,9 @@
 <script setup>
 const props = defineProps({
-  userId : Object,
-  userNickname : Object,
-  message : Object,
-  timestamp : Object
+  userId : Number,
+  userNickname : String,
+  message : String,
+  timestamp : String
 })
 
 const formatDatetimeChange = (timestamp) => {

@@ -5,6 +5,7 @@ import { ref, onMounted } from 'vue';
 export const useAuthStore = defineStore('auth', () => {
     const accessToken = ref(null);
     const userRole = ref(null);
+    const userEmail = ref(null);
 
     // 페이지가 로드될 때 localStorage 에서 토큰을 읽어와 상태를 초기화한다.
     onMounted(() => {
@@ -16,6 +17,16 @@ export const useAuthStore = defineStore('auth', () => {
             userRole.value = payload.auth;
         }
     });
+
+    // 회원가입 시 작성한 이메일을 저장하는 메소드
+    function registerEmail(email) {
+        userEmail.value = email;
+    }
+
+    // 회원가입시 작성한 이메일을 삭제하는 메소드
+    function clearEmail() {
+        userEmail.value = null;
+    }
 
     function login(token) {
         try {
@@ -43,5 +54,5 @@ export const useAuthStore = defineStore('auth', () => {
         return userRole.value.includes(requiredRole);
     }
 
-    return { accessToken, userRole, login, logout, isAuthorized };
+    return { accessToken, userRole, login, logout, isAuthorized, userEmail, registerEmail, clearEmail };
 });

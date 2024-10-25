@@ -2,28 +2,54 @@
 import RegisterForm from "@/components/user/RegisterForm.vue";
 import axios from "axios";
 import {useRouter} from "vue-router";
+import {ref} from "vue";
+import {useAuthStore} from "@/stores/auth.js";
 
 const router = useRouter();
+const LoadingState = ref(false);
+const authStore = useAuthStore();
 
-const handleRegister = async (formData) => {
+const errorMessage = ref('');
+
+const handleRegisterSubmit = async (formData) => {
+  // 백엔드 요청 보낼 때 로딩 시작
+  LoadingState.value = true;
   try {
     // 백엔드 서버로 회원가입 데이터 전달
-    const response = await axios.post('', formData);
+    const response = await axios.post('http://localhost:8080/users', {
+      userEmail: formData.userEmail,
+      userNickname: formData.userNickname,
+      userName: formData.userName,
+      userPassword: formData.userPassword,
+      userBirth: formData.userBirth
+    });
 
-    if (response.data.success()) {
+    if (response.status === 201) {
+      console.log('회원가입 성공');
+      // 회원가입 성공 시 Pinia 스토어에 해당 이메일 저장
+      authStore.registerEmail(formData.userEmail);
+
       router.push('/users/emails/codes');
-    } else {
-      alert('회원가입 실패');
     }
   } catch(error) {
-    alert('오류');
+
+    // 서버에서 전송된 에러 메세지 추출
+    if (error.response.data.message) {
+      errorMessage.value = error.response.data.message;
+    } else {
+      errorMessage.value = '다시 시도해주세요';
+      console.log('회원가입 실패: ', error);
+    }
+  } finally {
+    LoadingState.value = false;  // 로딩 종료
   }
 };
 </script>
 
 <template>
   <div class="register-view">
-    <RegisterForm @submit="handleRegister" />
+    <div v-if="LoadingState" class="loading-spinner">잠시만 기다려 주세요...</div>
+    <RegisterForm v-else @submit="handleRegisterSubmit" :errorMessage="errorMessage"/>
     <RouterView />
   </div>
 </template>
@@ -36,4 +62,16 @@ const handleRegister = async (formData) => {
   height: 100vh;
   background-color: #f5f5f5;
 }
+
+.loading-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #666;
+}
+
 </style>

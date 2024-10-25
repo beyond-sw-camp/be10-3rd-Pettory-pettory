@@ -8,12 +8,20 @@ const errorMessage = ref('');
 
 const emit = defineEmits(['verify']);
 
+// 부모에게 errorMessage 받기
+const props = defineProps({
+  errorMessage: {
+    type: String,
+    default: ''
+  }
+});
+
 const handleVerifyClick = () => {
   if (!verifyCode.value) {
     errorMessage.value = '인증코드를 입력해주세요.';
   } else {
     errorMessage.value = '';
-    emit('verify', verifyCode.value);
+    emit('submit', verifyCode.value);
   }
 };
 
@@ -24,7 +32,7 @@ const handleVerifyClick = () => {
     <h2>이메일 인증코드 입력</h2>
 
     <!-- 에러 메세지 표시 -->
-    <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+    <p v-if="props.errorMessage" class="error">{{props.errorMessage}}</p>
 
     <!-- 인증코드 필드 -->
     <div class="field-group">
