@@ -12,12 +12,10 @@ export function useCategoryLogic(initialCategories) {
     categoryNum: null,
     categoryTitle: ''
   });
-
-  const modals = ref({
-    isEditModalVisible: false,
-    isDeleteModalVisible: false,
-    isCreateModalVisible: false
-  });
+  const selectedCategoryNum = ref(null); // selectedCategoryNum을 추가
+  const  isEditModalVisible = ref(false);
+  const  isDeleteModalVisible = ref(false);
+  const  isCreateModalVisible = ref(false);
 
   // 카테고리 데이터 변화 감지
   watch(categories, (newCategories, oldCategories) => {
@@ -31,14 +29,14 @@ export function useCategoryLogic(initialCategories) {
 
   // 수정 모달 열기
   const openEditModal = (category) => {
-    selectedCategory.value.categoryNum = category.categoryNum;
+    selectedCategoryNum.value = category.categoryNum;
     selectedCategory.value.categoryTitle = category.categoryTitle;
-    modals.value.isEditModalVisible = true;
+    isEditModalVisible.value = true; // ref로 정의된 상태에 접근
   };
 
   // 수정 모달 닫기
   const closeEditModal = () => {
-    modals.value.isEditModalVisible = false;
+    isEditModalVisible.value = false;
   };
 
   // 카테고리 이름 업데이트
@@ -52,13 +50,14 @@ export function useCategoryLogic(initialCategories) {
 
   // 삭제 모달 열기
   const openDeleteModal = (category) => {
-    selectedCategory.value.categoryNum = category.categoryNum;
-    modals.value.isDeleteModalVisible = true;
+    console.log('선택된 카테고리 번호:', category.categoryNum); // 로그로 확인
+    selectedCategoryNum.value = category.categoryNum;
+    isDeleteModalVisible.value = true;
   };
 
   // 삭제 모달 닫기
   const closeDeleteModal = () => {
-    modals.value.isDeleteModalVisible = false;
+    isDeleteModalVisible.value = false;
   };
 
   // 카테고리 삭제
@@ -69,12 +68,12 @@ export function useCategoryLogic(initialCategories) {
 
   // 생성 모달 열기
   const openCreateModal = () => {
-    modals.value.isCreateModalVisible = true;
+    isCreateModalVisible.value = true; // ref로 정의된 상태에 접근
   };
 
   // 생성 모달 닫기
   const closeCreateModal = () => {
-    modals.value.isCreateModalVisible = false;
+    isCreateModalVisible.value = false;
   };
 
   // 새로운 카테고리 생성
@@ -139,8 +138,10 @@ export function useCategoryLogic(initialCategories) {
       isLoading,
       categories,
       selectedCategory,
-      modals
     },
+    isCreateModalVisible,
+    isDeleteModalVisible,
+    isEditModalVisible,
     openEditModal,
     closeEditModal,
     updateCategoryName,
@@ -150,7 +151,8 @@ export function useCategoryLogic(initialCategories) {
     openCreateModal,
     closeCreateModal,
     createCategory,
-    fetchCategoryDetail
+    fetchCategoryDetail,
+    selectedCategoryNum
   };
 }
 </script>

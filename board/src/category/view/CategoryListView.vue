@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, onMounted, ref, watch } from 'vue';
+import {defineComponent, nextTick, onMounted, ref, watch} from 'vue';
 import CategoryItem from '../components/CategoryItem.vue';
 import CreateCategoryModal from '../modal/CreateCategoryModal.vue';
 import UpdateCategoryModal from "@/category/modal/UpdateCategoryModal.vue";
@@ -28,6 +28,10 @@ export default defineComponent({
       closeCreateModal,
       createCategory,
       fetchCategoryDetail,
+      isCreateModalVisible,
+      isDeleteModalVisible,
+      isEditModalVisible,
+      selectedCategoryNum,
     } = useCategoryLogic();
 
     // isLoading의 변화를 감시하고 콘솔에 로그 출력
@@ -41,15 +45,40 @@ export default defineComponent({
       console.log(state.categories.value);
     });
 
+    watch(() => isCreateModalVisible, (newValue) => {
+      console.log('isCreateModalVisible 상태:', newValue);
+    });
+
+    // 모달이 닫힐 때 카테고리 목록을 최신화하는 함수
+    const handleModalClose = async () => {
+      await fetchCategoryDetail();
+      await nextTick();
+    };
+
+    const closeAndRefreshCreate = async () => {
+      closeCreateModal();  // 기존 closeCreateModal 호출
+      await handleModalClose();  // 최신화 함수 호출
+    };
+
+    const closeAndRefreshDelete = async () => {
+      closeDeleteModal();  // 기존 closeCreateModal 호출
+      await handleModalClose();  // 최신화 함수 호출
+    };
+
+    const closeAndRefreshUpdate = async () => {
+      closeEditModal();  // 기존 closeCreateModal 호출
+      await handleModalClose();  // 최신화 함수 호출
+    };
+
+
     // state에서 필요한 값을 반환합니다.
     return {
       categories: state.categories,
       isLoading: state.isLoading, // isLoading 상태
-      isEditModalVisible: state.modals.value.isEditModalVisible,
-      isDeleteModalVisible: state.modals.value.isDeleteModalVisible,
-      isCreateModalVisible: state.modals.value.isCreateModalVisible,
       selectedCategoryName: state.selectedCategory.value.categoryTitle, // 수정된 부분
-
+      isCreateModalVisible,
+      isDeleteModalVisible,
+      isEditModalVisible,
       openEditModal,
       closeEditModal,
       updateCategoryName,
@@ -59,7 +88,11 @@ export default defineComponent({
       openCreateModal,
       closeCreateModal,
       createCategory,
-      fetchCategoryDetail
+      fetchCategoryDetail,
+      selectedCategoryNum,
+      closeAndRefreshCreate,
+      closeAndRefreshDelete,
+      closeAndRefreshUpdate
     };
   }
 });
@@ -92,22 +125,27 @@ export default defineComponent({
     <UpdateCategoryModal
         :show="isEditModalVisible"
         :initialCategoryName="selectedCategoryName"
+        :categoryNum="selectedCategoryNum"
         @edit="updateCategoryName"
-        @close="closeEditModal"
+        @edit-success="closeAndRefreshUpdate"
+        @close="closeAndRefreshUpdate"
     />
 
     <!-- 삭제 확인 모달 -->
     <DeleteCategoryModal
         :show="isDeleteModalVisible"
+        :categoryNum="selectedCategoryNum"
         @confirm-delete="deleteCategoryConfirmed"
-        @close="closeDeleteModal"
+        @close="closeAndRefreshDelete"
+        @delete-success="closeAndRefreshDelete"
     />
 
     <!-- 카테고리 생성 모달 -->
     <CreateCategoryModal
         :show="isCreateModalVisible"
         @create="createCategory"
-        @close="closeCreateModal"
+        @close="closeAndRefreshCreate"
+        @create-success="closeAndRefreshUpdate"
     />
   </div>
 </template>

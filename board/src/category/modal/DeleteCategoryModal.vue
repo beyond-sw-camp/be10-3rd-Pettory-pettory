@@ -12,12 +12,17 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import axios from "axios";
 
 export default defineComponent({
   props: {
     show: {
       type: Boolean,
       default: false
+    },
+    categoryNum: {
+      type: Number,
+      required: true
     }
   },
   setup(props, { emit }) {
@@ -25,10 +30,22 @@ export default defineComponent({
       emit('close');
     };
 
-    const confirmDelete = () => {
-      emit('confirm-delete');
-    };
+    const confirmDelete = async () => {
+      try {
+        // DELETE 요청을 서버로 전송
+        await axios.delete(`http://localhost:8080/board/categorys/${props.categoryNum}`, {
+          headers: {
+            Authorization: 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJta0BuYXZlci5jb20iLCJhdXRoIjpbIlJPTEVfVVNFUiJdLCJleHAiOjE3MzAzNTQ4OTF9.nLn_NaNBr3y_gxCULCPVS0Eq8BSqb1kSBhB0P-_XpsX6r7QY0oH4ZEpgFncA5VUA1Ro72ZlU4P-JLwTL1o65vQ' // 올바른 토큰을 여기에 추가
+          }
+        });
 
+        // 성공적으로 삭제된 후 모달 닫기
+        emit('confirm-delete', props.categoryNum);
+        emit('delete-success'); // 부모 컴포넌트로 성공 이벤트 전달
+      } catch (error) {
+        console.error("카테고리 삭제 중 오류 발생: ", error);
+      }
+    };
     return {
       closeModal,
       confirmDelete
