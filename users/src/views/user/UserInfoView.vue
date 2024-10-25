@@ -1,6 +1,5 @@
 <script setup>
 import {ref, onMounted} from "vue";
-import axios from 'axios';
 import {useAuthStore} from "@/stores/auth.js";
 import {useRouter} from "vue-router";
 import ButtonLongColor from "@/components/common/ButtonLongColor.vue";

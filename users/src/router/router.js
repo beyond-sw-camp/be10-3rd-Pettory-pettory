@@ -1,12 +1,6 @@
 import {createRouter, createWebHistory} from "vue-router";
-import LoginView from "@/views/user/LoginView.vue";
-import RegisterView from "@/views/user/RegisterView.vue";
-import HomeView from "@/views/common/HomeView.vue";
-import RegisterVerifyView from "@/views/user/RegisterVerifyView.vue";
-import UserInfoView from "@/views/user/UserInfoView.vue";
-import RegisterSuccessView from "@/views/user/RegisterSuccessView.vue";
-import FindPasswordView from "@/views/user/FindPasswordView.vue";
-import ChangePasswordView from "@/views/user/ChangePasswordView.vue";
+import {useAuthStore} from "@/stores/auth.js";
+
 
 const router = createRouter({
     history: createWebHistory(),
@@ -42,7 +36,8 @@ const router = createRouter({
         {
             // 마이페이지 화면
             path: '/users/email',
-            component: () => import('@/views/user/UserInfoView.vue')
+            component: () => import('@/views/user/UserInfoView.vue'),
+            meta: {requiresAuth: true},
         },
         {
             // 비밀번호 찾기 화면
@@ -52,10 +47,30 @@ const router = createRouter({
         {
             // 비밀번호 변경 화면
             path: '/users/passwords',
-            component: () => import('@/views/user/ChangePasswordView.vue')
+            component: () => import('@/views/user/ChangePasswordView.vue'),
+            meta: {requiresAuth: true},
+
         },
 
     ]
+});
+
+// 로그인 안 한 상태에셔 url 에 경로 입력하여 접근하는 동작 막기
+// route 이동 전 인증 상태를 확인한다.
+router.beforeEach((to, from, next) => {
+    const authStore = useAuthStore();
+
+    // 인증이 필요한 페이지에 접근할 때
+    if (to.meta.requiresAuth && !authStore.accessToken) {
+        next({path: '/login'}); //  로그인 페이지로 리디렉션
+    }
+    // 로그인 한 후 로그인, 회원가입 페이지에 접근할 때
+    else if (authStore.accessToken && (to.path === '/login' || to.path === '/users')) {
+        next({path: '/users/email'});  // 마이페이지로 리디렉션
+    }
+    else {
+        next();
+    }
 });
 
 export default router;

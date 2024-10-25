@@ -4,7 +4,6 @@ import {RouterLink} from "vue-router";
 import {useAuthStore} from "@/stores/auth.js";
 import router from "@/router/router.js";
 import {fetchUserInfo} from "@/util/FetchUserInfo.js";
-import ButtonSmallColor from "@/components/common/ButtonSmallColor.vue";
 
 // fetchUserInfo 메소드에서 데이터 가져오기
 const { userInfo, fetchUserInfoData } = fetchUserInfo();
