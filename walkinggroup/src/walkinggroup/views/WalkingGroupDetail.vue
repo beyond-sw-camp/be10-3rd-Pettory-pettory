@@ -22,7 +22,7 @@ const fetchWalkingGroupDetail = async () => {
         Authorization: `Bearer ${authStore.accessToken}`
       }
     });
-    walkingGroup.value = response.data.walkingGroupsById;
+    walkingGroup.value = response.data.walkingGroup;
   } catch (error) {
     console.error('산책 모임 정보를 불러오는 중 에러가 발생했습니다.', error);
   }
@@ -81,8 +81,8 @@ onMounted(() => fetchWalkingGroupDetail());
     <div v-else>
       <p>Loading...</p>
     </div>
-    <!-- 방장일 경우 수정/삭제 버튼, 아닐 경우 신청하기 버튼 -->
-<!--    <div v-if="isLeader" class="d-flex justify-content-end mb-3">-->
+<!--     방장일 경우 수정/삭제 버튼, 아닐 경우 신청하기 버튼-->
+<!--    <div class="d-flex justify-content-end mb-3">-->
 <!--      <ButtonSmallColor @click="goToEditPage" class="editBtn">수정하기</ButtonSmallColor>-->
 <!--      <ButtonSmallColor @click="deleteWalkingGroup" class="deleteBtn">삭제하기</ButtonSmallColor>-->
 <!--    </div>-->
@@ -93,5 +93,8 @@ onMounted(() => fetchWalkingGroupDetail());
 </template>
 
 <style scoped>
-
+.applyBtn {
+  align-items: center;
+  justify-content: center;
+}
 </style>

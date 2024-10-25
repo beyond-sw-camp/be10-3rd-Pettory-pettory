@@ -18,7 +18,7 @@ const fetchWalkingGroupData = async (walkingGroupId) => {
       },
     });
 
-    walkingGroupData.value = response.data.walkingGroupsById;
+    walkingGroupData.value = response.data.walkingGroup;
   } catch (error) {
     console.error("산책 모임 정보를 가져오는 중 오류 발생", error);
   }

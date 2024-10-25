@@ -4,6 +4,11 @@ const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
+            path : '/',
+            name : 'Main',
+            component : () => import('@/main/view/MainView.vue')
+        },
+        {
             path: '/walkinggroups',
             component: () => import('@/walkinggroup/views/WalkingGroupList.vue')
         },
