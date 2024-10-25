@@ -47,8 +47,8 @@ const emitCheck = (groupNum, isActive, newBookmarks) => {
   <div v-if="isVisible" class="modal-overlay" @click.self="closeModal">
     <div class="modal-content">
       <back-button :isModal=true @click="closeModal"/>
-
       <section class="top-section">
+
         <GroupItem :group="group" :bookmarks="bookmarks" :range="range" :buttonVisible=false @check="emitCheck" />
       </section>
 
@@ -91,7 +91,7 @@ const emitCheck = (groupNum, isActive, newBookmarks) => {
   background-color: #FFFFFF;
   padding: 50px;
   width: 700px;
-  height: 100%;
+  height: 500px;
 }
 
 .top-section {
@@ -125,7 +125,6 @@ const emitCheck = (groupNum, isActive, newBookmarks) => {
   border: 1px solid #53D9C1;
   background-color: #fff;
   border-radius: 10px;
-  height: 200px;
   margin: 10px;
   padding: 10px;
   flex : 1;
@@ -136,7 +135,6 @@ const emitCheck = (groupNum, isActive, newBookmarks) => {
   border: 1px solid #53D9C1;
   background-color: #fff;
   border-radius: 10px;
-  height: 200px;
   margin: 10px;
   padding: 10px;
   flex : 2;

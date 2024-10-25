@@ -9,7 +9,7 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-  isMaster:{
+  isMaster: {
     type: Boolean,
     required: true
   },
@@ -28,12 +28,18 @@ const emit = defineEmits(['info', 'withdrawal']);
   <div class="user-item">
     <span>{{ user.userNickname }}</span>
     <div v-if="isParticipation">
-      <ButtonLongColor v-if="isMaster" class="info-btn" @click="emit('withdrawal')" >강퇴</ButtonLongColor>
-      <ButtonLongColor class="info-btn" @click="emit('info')" >정보보기</ButtonLongColor>
+      <template v-if="isMaster">
+        <ButtonLongColor class="info-btn">배송정보 입력</ButtonLongColor>
+        <ButtonLongColor class="info-btn" @click="emit('info')">정보보기</ButtonLongColor>
+      </template>
+      <template v-else>
+        <ButtonLongColor class="info-btn">수령대기</ButtonLongColor>
+        <ButtonLongColor class="info-btn" @click="emit('info')">정보보기</ButtonLongColor>
+      </template>
     </div>
     <div v-else>
-      <ButtonSmallColor v-if="!isMaster" class="info-btn" @click="emit('withdrawal')" >강퇴</ButtonSmallColor>
-      <ButtonSmallColor class="info-btn" @click="emit('info')" >정보보기</ButtonSmallColor>
+      <ButtonSmallColor v-if="isMaster" class="info-btn" @click="emit('withdrawal')">강퇴</ButtonSmallColor>
+      <ButtonSmallColor class="info-btn" @click="emit('info')">정보보기</ButtonSmallColor>
     </div>
   </div>
 

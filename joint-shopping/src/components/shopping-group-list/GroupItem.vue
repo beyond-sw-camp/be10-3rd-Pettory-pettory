@@ -1,5 +1,4 @@
 <script setup>
-import {useRouter} from "vue-router";
 import ButtonLongColor from "@/components/common/ButtonLongColor.vue";
 import ButtonSmallColor from "@/components/common/ButtonSmallColor.vue";
 import {ref} from "vue";
@@ -60,8 +59,9 @@ const toggleClass = (groupNum) => {
       <!-- 카드 내용 -->
       <div class="card-left-content">
         <!-- 참여 가능 태그 -->
-        <div class="circle">
-          <span>참가가능</span>
+        <div :class="(group.jointShoppingGroupState === 'APPLICATION') ? 'circle-application' : 'circle-close'">
+          <span v-if="(group.jointShoppingGroupState === 'APPLICATION')">참가가능</span>
+          <span v-else > 마감 </span>
         </div>
         <!-- 모임 설명 -->
         <div>
@@ -122,13 +122,24 @@ const toggleClass = (groupNum) => {
   gap: 16px;
 }
 
-.circle {
+.circle-application {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 75px; /* 동그라미의 너비 */
   height: 75px; /* 동그라미의 높이 (너비와 같아야 함) */
   background-color: #a8e4e3; /* 동그라미의 배경색 */
+  border-radius: 50%; /* 동그라미를 만드는 핵심 */
+  margin-left: 20px;
+}
+
+.circle-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 75px; /* 동그라미의 너비 */
+  height: 75px; /* 동그라미의 높이 (너비와 같아야 함) */
+  background-color: #FCB3AD; /* 동그라미의 배경색 */
   border-radius: 50%; /* 동그라미를 만드는 핵심 */
   margin-left: 20px;
 }

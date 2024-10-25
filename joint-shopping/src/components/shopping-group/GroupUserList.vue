@@ -20,6 +20,9 @@ const props = defineProps({
   }
 });
 
+// emit 정의
+const emit = defineEmits(['withdrawal']);
+
 // 선택한 유저의 정보 모달창 띄움
 const isUserModalVisible = ref(false);
 const isWithdrawalModalVisible = ref(false);
@@ -32,6 +35,12 @@ const userInfo = (user) => {
 const userWithdrawal = (user) => {
   selectedUser.value = user;
   isWithdrawalModalVisible.value = true;
+}
+
+// 강퇴 모달 확인 클릭 시
+const confirmWithdrawalModal = (userEmail) => {
+  isWithdrawalModalVisible.value = false;
+  emit('withdrawal', userEmail);
 }
 
 // 뒤로가기로 나가기
@@ -54,7 +63,7 @@ const closeWithdrawalModal = () => {
       <GroupUserItem v-for="user in userList" :key="user.userId" :user="user" :isMaster="isMaster"
                      :isParticipation="isParticipation" @info="userInfo(user)" @withdrawal="userWithdrawal(user)"/>
       <UserInfoModal :user="selectedUser" :isVisible="isUserModalVisible" @close="closeInfoModal"/>
-      <ModalSmall :isVisible="isWithdrawalModalVisible" @close="closeWithdrawalModal"/>
+      <ModalSmall :isVisible="isWithdrawalModalVisible" @close="closeWithdrawalModal" @confirm="confirmWithdrawalModal(selectedUser.userEmail)"/>
     </div>
   </div>
 </template>

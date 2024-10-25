@@ -11,6 +11,7 @@ import axios from "axios";
 import PagingBar from "@/components/shopping-group-list/PagingBar.vue";
 
 const authStore = useAuthStore();
+const router = useRouter();
 
 // 상태 관리를 위한 반응형 객체 생성
 const state = reactive({
@@ -134,8 +135,23 @@ const handleBookmarkCheck = async (groupNum, isActive, newBookmarks) => {
   }
 };
 
+const joinGroup = async (groupNum, isParticipationGroup) => {
+  if (!isParticipationGroup) {
+    const token = authStore.accessToken;
+
+    // 참가 axios api
+    await axios.post(`http://localhost:8080/jointshopping/groups/${groupNum}/users`, null, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  }
+
+  await router.push(`/shoppinggroup/${groupNum}`);
+}
+
 // 전체 모임방, 참가 모임방 토글
-const range = ref('participation')
+const range = ref('participation');
 const rangeToggle = () => {
   range.value = (range.value === "entire" || range.value === "bookmark") ? "participation" : "entire";
 
@@ -166,22 +182,24 @@ const changePage = (page) => {
     fetchUserGroups(page);  // 페이지를 1로 초기화하고 다시 호출
   } else if (range.value === 'entire') {
     fetchGroups(page);  // 페이지를 1로 초기화하고 다시 호출
-  } else if (range.value === 'bookmark'){
+  } else if (range.value === 'bookmark') {
     fetchBookmarks(page);
   }
 }
 
-
-const router = useRouter();
 const goToGroupCreate = () => {
   router.push('/shoppinggroup/create');
 }
 
 // 컴포넌트 마운트 시 목록 로드
 onMounted(() => {
-  fetchUserGroups();
-  fetchGroups();
-  fetchBookmarks();
+  if (range.value === 'participation') {
+    fetchUserGroups();
+  } else if (range.value === 'entire') {
+    fetchGroups();
+  } else if (range.value === 'bookmark') {
+    fetchBookmarks();
+  }
 });
 </script>
 
@@ -193,7 +211,7 @@ onMounted(() => {
     </div>
     <SearchBar @search="onSearch"/>
     <GroupList :groups="state.groups" :bookmarks="state.bookmarks" :participationGroups="state.participationGroups"
-               :range="range" @check="handleBookmarkCheck"/>
+               :range="range" @check="handleBookmarkCheck" @join="joinGroup"/>
     <div class="button-div">
       <div>
         <ButtonLongColor v-if="range !== 'bookmark'" @click="rangeBookmark">즐겨찾기 모임방</ButtonLongColor>

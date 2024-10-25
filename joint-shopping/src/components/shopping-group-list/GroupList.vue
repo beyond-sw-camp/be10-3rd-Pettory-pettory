@@ -4,7 +4,6 @@ import GroupItem from "@/components/shopping-group-list/GroupItem.vue";
 import {computed, ref} from "vue";
 import ModalSmall from "@/components/common/ModalSmall.vue";
 import GroupDetailModal from "@/components/modal/GroupDetailModal.vue";
-import {useRouter} from "vue-router";
 
 const props = defineProps({
   groups: {
@@ -26,7 +25,7 @@ const props = defineProps({
 });
 
 // emit 정의
-const emit = defineEmits(['check']);
+const emit = defineEmits(['check', 'join']);
 
 // 부모 컴포넌트로 검색 이벤트 전달
 const emitCheck = (groupNum, isActive, newBookmarks) => {
@@ -36,15 +35,16 @@ const emitCheck = (groupNum, isActive, newBookmarks) => {
 // 배열이 비어 있는지 확인하는 computed 속성
 const isEmptyArray = computed(() => props.groups.length === 0);
 
-const router = useRouter();
 
 // 선택한 그룹의 정보 모달창 띄움 / 이미 참가했다면 바로 모임방으로 이동
 const isModalVisible = ref(false);
 const isFailModalVisible = ref(false);
 const selectedGroup = ref(null);
+const isParticipationGroup = ref(false);
 const groupInfo = (group) => {
   if ( props.range === 'participation' || props.range === 'bookmark'){
-    router.push(`/shoppinggroup/${group.jointShoppingGroupNum}`);
+    isParticipationGroup.value = true;
+    emit('join',group.jointShoppingGroupNum, isParticipationGroup.value );
   }
   else if ( props.range === 'entire'){
     selectedGroup.value = group;
@@ -68,8 +68,8 @@ const goToGroup = (id) => {
   if ( props.participationGroups.includes(id) ){
     isFailModalVisible.value = true;
   }else {
-    // 참가 axios api 필요 - view 로 전달한 뒤
-    router.push(`/shoppinggroup/${id}`);
+    isParticipationGroup.value = false;
+    emit('join',id, isParticipationGroup.value);
   }
 }
 
@@ -78,7 +78,9 @@ const goToGroup = (id) => {
 <template>
   <div class="container">
     <div v-if="isEmptyArray" class="no-group-card">
-      <p>참가하신 공동구매 모임방이 없습니다.</p>
+      <p>
+        {{ range === 'entire' ? '모임방이 없습니다.' : (range === 'participation' ? '참가하신 모임방이 없습니다.' : '즐겨찾기된 모임방이 없습니다.') }}
+      </p>
     </div>
     <template v-else>
       <GroupItem v-for="group in groups" :key="group.jointShoppingGroupNum" :group="group" :bookmarks="bookmarks"
