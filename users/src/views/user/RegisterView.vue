@@ -9,6 +9,8 @@ const router = useRouter();
 const LoadingState = ref(false);
 const authStore = useAuthStore();
 
+const errorMessage = ref('');
+
 const handleRegisterSubmit = async (formData) => {
   // 백엔드 요청 보낼 때 로딩 시작
   LoadingState.value = true;
@@ -28,12 +30,16 @@ const handleRegisterSubmit = async (formData) => {
       authStore.registerEmail(formData.userEmail);
 
       router.push('/users/emails/codes');
-    } else {
-      alert('회원가입 실패');
     }
   } catch(error) {
-    console.log('에러: ', error);
-    alert('오류');
+
+    // 서버에서 전송된 에러 메세지 추출
+    if (error.response.data.message) {
+      errorMessage.value = error.response.data.message;
+    } else {
+      errorMessage.value = '다시 시도해주세요';
+      console.log('회원가입 실패: ', error);
+    }
   } finally {
     LoadingState.value = false;  // 로딩 종료
   }
@@ -43,7 +49,7 @@ const handleRegisterSubmit = async (formData) => {
 <template>
   <div class="register-view">
     <div v-if="LoadingState" class="loading-spinner">잠시만 기다려 주세요...</div>
-    <RegisterForm v-else @submit="handleRegisterSubmit" />
+    <RegisterForm v-else @submit="handleRegisterSubmit" :errorMessage="errorMessage"/>
     <RouterView />
   </div>
 </template>

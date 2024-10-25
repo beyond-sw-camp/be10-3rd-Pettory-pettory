@@ -7,6 +7,14 @@ const email = ref('');
 const errorMessage = ref('');
 const emit = defineEmits(['submit']);
 
+// 부모에게 errorMessage 받기
+const props = defineProps({
+  errorMessage: {
+    type: String,
+    default: ''
+  }
+});
+
 const handleSendClick = () => {
   if (!email.value) {
     errorMessage.value = '이메일을 입력해주세요';
@@ -22,6 +30,9 @@ const handleSendClick = () => {
 
     <h2>펫토리 비밀번호 찾기</h2>
     <p>가입하신 이메일로 임시 비밀번호를 전송해드릴게요.</p>
+
+    <!-- 에러 메세지 표시 -->
+    <p v-if="props.errorMessage" class="error">{{props.errorMessage}}</p>
 
     <!-- 이메일 필드 -->
     <div class="field-group">
@@ -63,6 +74,11 @@ const handleSendClick = () => {
   text-align: left;
   font-weight: bold;
   font-size: 14px;
+}
+
+.error {
+  color: #53D9C1;
+  font-weight: bold;
 }
 
 </style>

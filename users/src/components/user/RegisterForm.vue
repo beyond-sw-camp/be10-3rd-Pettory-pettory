@@ -3,15 +3,6 @@ import {computed, ref} from 'vue';
 import InputBoxLongGray from '@/components/common/InputBoxLongGray.vue';
 import ButtonLongColor from "@/components/common/ButtonLongColor.vue";
 
-
-// const formData = ref({
-//   email: "",
-//   nickName: "",
-//   name: "",
-//   pwd: "",
-//   birth: ""
-// });
-
 const userEmail = ref('');
 const userNickname = ref('');
 const userName = ref('');
@@ -22,9 +13,17 @@ const errorMessage = ref('');
 
 const emit = defineEmits(['submit']);
 
+// 부모에게 errorMessage 받기
+const props = defineProps({
+  errorMessage: {
+    type: String,
+    default: ''
+  }
+});
+
 const handleRegister = () => {
   if (!userEmail.value || !userNickname.value || !userName.value || !userPassword.value || !userBirth.value) {
-    errorMessage.value = '빠진 부분이 없는지 확인하세요!';
+    errorMessage.value = '빠진 부분이 없는지 확인해주세요!';
   } else {
     errorMessage.value = '';
     emit('submit', {
@@ -37,15 +36,6 @@ const handleRegister = () => {
   }
 };
 
-// const isFormValid = computed(() => {
-//   return (
-//       formData.value.email &&
-//       formData.value.nickName &&
-//       formData.value.name &&
-//       formData.value.pwd &&
-//       formData.value.birth
-//   );
-// });
 </script>
 
 <template>
@@ -53,7 +43,7 @@ const handleRegister = () => {
     <h2>펫토리 회원가입</h2>
 
     <!-- 에러 메세지 표시 -->
-    <p v-if="errorMessage" class="error">{{errorMessage}}</p>
+    <p v-if="props.errorMessage" class="error">{{props.errorMessage}}</p>
 
     <!-- 이메일 필드 -->
     <div class="field-group">

@@ -7,8 +7,7 @@ import WalkingRecordCalendarView from "@/views/user/WalkingRecordCalendarView.vu
 import UserInfoView from "@/views/user/UserInfoView.vue";
 import RegisterSuccessView from "@/views/user/RegisterSuccessView.vue";
 import FindPasswordView from "@/views/user/FindPasswordView.vue";
-import ChangePasswordForm from "@/components/user/ChangePasswordForm.vue";
-// import FindPasswordView from "@/views/user/FindPasswordView.vue";
+import ChangePasswordView from "@/views/user/ChangePasswordView.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -49,12 +48,12 @@ const router = createRouter({
             component: UserInfoView
         },
         {
-            path: '/users/passwords',
+            path: '/users/passwords/emails',
             component: FindPasswordView
         },
         {
             path: '/users/passwords',
-            component: ChangePasswordForm
+            component: ChangePasswordView
         },
 
     ]

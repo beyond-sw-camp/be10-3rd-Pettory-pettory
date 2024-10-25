@@ -9,6 +9,14 @@ const errorMessage = ref('');
 
 const emit = defineEmits(['submit']);
 
+// 부모에게 errorMessage 받기
+const props = defineProps({
+  errorMessage: {
+    type: String,
+    default: ''
+  }
+});
+
 const handleChangeClick = () => {
   if (!curPwd.value || !newPwd.value) {
     errorMessage.value = '빠진 부분이 없는지 확인해주세요!';
@@ -24,6 +32,9 @@ const handleChangeClick = () => {
 
     <h2>펫토리 비밀번호 변경</h2>
     <p>가입하신 이메일로 임시 비밀번호를 전송해드릴게요.</p>
+
+    <!-- 에러 메세지 표시 -->
+    <p v-if="props.errorMessage" class="error">{{props.errorMessage}}</p>
 
     <!-- 현재 비밀번호 필드 -->
     <div class="field-group">
@@ -73,5 +84,10 @@ const handleChangeClick = () => {
   text-align: left;
   font-weight: bold;
   font-size: 14px;
+}
+
+.error {
+  color: #53D9C1;
+  font-weight: bold;
 }
 </style>

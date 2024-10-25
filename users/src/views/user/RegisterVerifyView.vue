@@ -8,6 +8,8 @@ import {useAuthStore} from "@/stores/auth.js";
 const router = useRouter();
 const authStore = useAuthStore();
 
+const errorMessage = ref('');
+
 const handleVerifySubmit = async (verifyCode) => {
   try {
     const sendVerifyCodeRequest = {
@@ -27,9 +29,13 @@ const handleVerifySubmit = async (verifyCode) => {
       alert('인증 실패');
     }
   } catch (error) {
-    alert('오류');
-    console.error('오류 발생:', error);
-    console.error('오류 응답:', error.response?.data);
+    // 서버에서 전송된 에러 메세지 추출
+    if (error.response.data.message) {
+      errorMessage.value = error.response.data.message;
+    } else {
+      errorMessage.value = '다시 시도해주세요';
+      console.log('이메일 인증코드 검증 실패', error);
+    }
   }
 };
 
@@ -41,7 +47,7 @@ onMounted(() => {
 
 <template>
   <div class="register-verify-view">
-    <RegisterVerifyForm @submit="handleVerifySubmit" />
+    <RegisterVerifyForm @submit="handleVerifySubmit" :errorMessage="errorMessage"/>
     <RouterView />
   </div>
 </template>
