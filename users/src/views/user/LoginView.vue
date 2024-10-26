@@ -4,6 +4,7 @@ import {useRouter} from "vue-router";
 import {ref} from "vue";
 import axios from 'axios';
 import {useAuthStore} from "@/stores/auth.js";
+import BackButton from "@/components/common/BackButton.vue";
 
 const router = useRouter();
 const errorMessage = ref('');
@@ -46,17 +47,12 @@ const handleLoginSubmit = async (formData) => {
 
 <template>
   <div class="login-view">
+    <BackButton />
     <LoginForm @submit="handleLoginSubmit" :errorMessage="errorMessage"/>
     <RouterView />
   </div>
 </template>
 
 <style scoped>
-.login-view {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #f5f5f5;
-}
+
 </style>

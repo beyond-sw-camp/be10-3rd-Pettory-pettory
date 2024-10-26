@@ -4,6 +4,7 @@ import {useRouter} from "vue-router";
 import {onMounted, ref} from "vue";
 import RegisterVerifyForm from "@/components/user/RegisterVerifyForm.vue";
 import {useAuthStore} from "@/stores/auth.js";
+import BackButton from "@/components/common/BackButton.vue";
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -47,6 +48,7 @@ onMounted(() => {
 
 <template>
   <div class="register-verify-view">
+    <BackButton />
     <RegisterVerifyForm @submit="handleVerifySubmit" :errorMessage="errorMessage"/>
     <RouterView />
   </div>
@@ -54,10 +56,9 @@ onMounted(() => {
 
 <style scoped>
 .register-verify-view {
+  margin-top: 40px;  /* 폼 위쪽 여백 추가 */
+  margin-bottom: 100px; /* 폼 아래쪽 여백 추가 */
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #f5f5f5;
+  justify-content: center; /* 화면 가운데에 폼을 정렬 */
 }
 </style>

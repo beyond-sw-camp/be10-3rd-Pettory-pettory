@@ -97,9 +97,11 @@ onBeforeUnmount(() => {
     display: flex;
     align-items: center;
     gap: 20px;
+    flex-wrap: nowrap;  /* 화면이 줄어들어도 글씨 가로로 유지 */
   }
 
   a {
+    white-space: nowrap;
     text-decoration: none;
     color: #333;
     padding: 10px 15px;

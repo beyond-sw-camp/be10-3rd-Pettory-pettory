@@ -4,10 +4,12 @@ import axios from "axios";
 import {useRouter} from "vue-router";
 import {useAuthStore} from "@/stores/auth.js";
 import {ref} from "vue";
+import BackButton from "@/components/common/BackButton.vue";
 
 const router = useRouter();
 // Pinia 스토어
 const authStore = useAuthStore();
+
 
 const errorMessage = ref('');
 const handleChangePasswordSubmit = async ({curPwd, newPwd}) => {
@@ -27,6 +29,7 @@ const handleChangePasswordSubmit = async ({curPwd, newPwd}) => {
     });
 
     if (response.status === 200) {
+      authStore.logout();
       router.push('/login');
     }
   } catch (error) {
@@ -42,6 +45,7 @@ const handleChangePasswordSubmit = async ({curPwd, newPwd}) => {
 </script>
 
 <template>
+  <BackButton />
   <div class="change-password-view">
     <ChangePasswordForm @submit="handleChangePasswordSubmit" :errorMessage="errorMessage" />
     <RouterView />
@@ -50,10 +54,19 @@ const handleChangePasswordSubmit = async ({curPwd, newPwd}) => {
 
 <style scoped>
 .change-password-view {
+  margin-bottom: 100px; /* 폼 아래쪽 여백 추가 */
   display: flex;
-  justify-content: center;
+  justify-content: center; /* 화면 가운데에 폼을 정렬 */
+}
+
+.loading-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  height: 100vh;
-  background-color: #f5f5f5;
+  color: #666;
 }
 </style>

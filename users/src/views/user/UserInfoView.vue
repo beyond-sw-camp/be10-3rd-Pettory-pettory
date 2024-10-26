@@ -5,6 +5,7 @@ import {useRouter} from "vue-router";
 import ButtonLongColor from "@/components/common/ButtonLongColor.vue";
 
 import {fetchUserInfo} from "@/util/FetchUserInfo.js";
+import BackButton from "@/components/common/BackButton.vue";
 
 const authStore = useAuthStore();
 // const userData = ref(null);
@@ -12,11 +13,6 @@ const router = useRouter();
 
 // fetchUserInfo 메소드에서 데이터 가져오기
 const { userInfo, fetchUserInfoData } = fetchUserInfo();
-
-const handleLogout = () => {
-  authStore.logout();
-  router.push('/');
-};
 
 const handleChangePasswordClick = () => {
   router.push('/users/passwords')
@@ -29,6 +25,7 @@ onMounted(() => {
 </script>
 
 <template>
+  <BackButton />
   <div class="user-profile-container" v-if="userInfo">
     <h2>{{ userInfo.userNickname }} 님의 회원 정보</h2>
     <div class="user-info-box">

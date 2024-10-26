@@ -1,6 +1,7 @@
 <script setup>
 import {useRouter} from 'vue-router';
 import RegisterSuccessBox from "@/components/user/RegisterSuccessBox.vue";
+import BackButton from "@/components/common/BackButton.vue";
 
 const router = useRouter();
 
@@ -12,6 +13,7 @@ const handleHome = () => {
 
 <template>
   <div class="register-success-view">
+    <BackButton />
     <RegisterSuccessBox @home="handleHome" />
   </div>
 
@@ -19,10 +21,10 @@ const handleHome = () => {
 
 <style scoped>
 .register-success-view {
+  margin-top: 40px;  /* 폼 위쪽 여백 추가 */
+  margin-bottom: 100px; /* 폼 아래쪽 여백 추가 */
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #f5f5f5;
+  justify-content: center; /* 화면 가운데에 폼을 정렬 */
+
 }
 </style>

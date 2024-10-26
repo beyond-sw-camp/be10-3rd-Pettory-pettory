@@ -97,7 +97,7 @@ const handleRegister = () => {
     </div>
 
     <!-- 회원가입 버튼 -->
-    <ButtonLongColor @click="handleRegister">
+    <ButtonLongColor class="btn" @click="handleRegister">
       가입하기
     </ButtonLongColor>
 
@@ -106,11 +106,12 @@ const handleRegister = () => {
 
 <style scoped>
 .register-form {
+  align-items: center;
+  width: 500px;
+  margin: 0 auto;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  width: 40%;
-  padding: 20px;
   border: 1px solid #ccc;
   border-radius: 10px;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
@@ -118,14 +119,15 @@ const handleRegister = () => {
 }
 
 .field-group {
-  width: 70%;
-  margin-bottom: 15px;
+  width: 80%;
 }
 
-.form-group p {
-  text-align: left;
-  font-weight: bold;
-  font-size: 14px;
+.field-group > * {
+  margin-bottom: 3px;
+}
+
+.btn {
+  margin-top: 20px;
 }
 
 .error {

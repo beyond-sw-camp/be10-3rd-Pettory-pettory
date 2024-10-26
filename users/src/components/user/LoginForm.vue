@@ -25,6 +25,8 @@ const handleLogin = () => {
     emit('submit', {email: email.value, password: pwd.value})
   }
 };
+
+
 </script>
 
 <template>
@@ -59,7 +61,7 @@ const handleLogin = () => {
 
 
       <!-- 로그인 버튼 -->
-      <ButtonLongColor @click="handleLogin">
+      <ButtonLongColor class="btn" @click="handleLogin">
         로그인하기
       </ButtonLongColor>
 
@@ -76,13 +78,12 @@ const handleLogin = () => {
 
 <style scoped>
 .login-container {
-  display: flex;
-  flex-direction: column;
   align-items: center;
   width: 300px;
   margin: 0 auto;
   padding: 20px;
 }
+
 .login-form {
   display: flex;
   flex-direction: column;
@@ -95,15 +96,24 @@ const handleLogin = () => {
   background-color: #fff;
 }
 
+
 .field-group {
-  width: 70%;
-  margin-bottom: 15px;
+  width: 80%;
+}
+
+.field-group > * {
+  margin-bottom: 3px;
 }
 
 .form-group p {
   text-align: left;
   font-weight: bold;
   font-size: 14px;
+  margin-bottom: 0px;
+}
+
+.btn {
+  margin-top: 20px;
 }
 
 h2 {

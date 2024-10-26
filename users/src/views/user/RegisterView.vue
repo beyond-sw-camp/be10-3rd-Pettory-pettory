@@ -4,6 +4,7 @@ import axios from "axios";
 import {useRouter} from "vue-router";
 import {ref} from "vue";
 import {useAuthStore} from "@/stores/auth.js";
+import BackButton from "@/components/common/BackButton.vue";
 
 const router = useRouter();
 const LoadingState = ref(false);
@@ -47,6 +48,7 @@ const handleRegisterSubmit = async (formData) => {
 </script>
 
 <template>
+  <BackButton v-if="!LoadingState" />
   <div class="register-view">
     <div v-if="LoadingState" class="loading-spinner">잠시만 기다려 주세요...</div>
     <RegisterForm v-else @submit="handleRegisterSubmit" :errorMessage="errorMessage"/>
@@ -56,11 +58,10 @@ const handleRegisterSubmit = async (formData) => {
 
 <style scoped>
 .register-view {
+  margin-top: 40px;  /* 폼 위쪽 여백 추가 */
+  margin-bottom: 100px; /* 폼 아래쪽 여백 추가 */
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #f5f5f5;
+  justify-content: center; /* 화면 가운데에 폼을 정렬 */
 }
 
 .loading-spinner {

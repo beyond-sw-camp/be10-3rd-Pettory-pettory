@@ -56,7 +56,7 @@ const handleChangeClick = () => {
     </div>
 
     <!-- 인증 버튼 -->
-    <ButtonLongColor @click="handleChangeClick">
+    <ButtonLongColor class="btn" @click="handleChangeClick">
       변경하기
     </ButtonLongColor>
   </div>
@@ -64,26 +64,27 @@ const handleChangeClick = () => {
 
 <style scoped>
 .change-password-form {
+  align-items: center;
+  width: 500px;
+  margin: 0 auto;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  width: 40%;
-  padding: 20px;
   border: 1px solid #ccc;
   border-radius: 10px;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
   background-color: #fff;
 }
-
 .field-group {
-  width: 70%;
-  margin-bottom: 15px;
+  width: 80%;
 }
 
-.form-group p {
-  text-align: left;
-  font-weight: bold;
-  font-size: 14px;
+.field-group > * {
+  margin-bottom: 3px;
+}
+
+.btn {
+  margin-top: 20px;
 }
 
 .error {
