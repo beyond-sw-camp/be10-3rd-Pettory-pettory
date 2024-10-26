@@ -233,7 +233,9 @@ onMounted(() => {
 
     </section>
     <section class="right-section">
-<!--      <ChattingMainWindow :chatroomState="" class="chat-box">채팅</ChattingMainWindow>-->
+      <div class="chat-box">
+        <h2>채팅방</h2>
+      </div>
     </section>
   </div>
 </template>
