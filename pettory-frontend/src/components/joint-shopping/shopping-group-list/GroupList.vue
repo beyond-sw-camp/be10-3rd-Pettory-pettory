@@ -89,7 +89,8 @@ const goToGroup = (id) => {
     <GroupDetailModal :group="selectedGroup" :isVisible="isModalVisible" :bookmarks="bookmarks" :range="range"
                       @join="goToGroup(selectedGroup.jointShoppingGroupNum)" @close="closeModal" />
 
-    <ModalSmall :isVisible="isFailModalVisible" @close="closeFailModal"/>
+    <ModalSmall :isVisible="isFailModalVisible" :message="'이미 참가하여 재참가하실 수 없습니다.'"
+                @confirm="closeFailModal" @close="closeFailModal"/>
   </div>
 </template>
 

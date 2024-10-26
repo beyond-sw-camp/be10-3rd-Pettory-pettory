@@ -103,23 +103,28 @@ const router = createRouter({
 
         {
             path: '/shoppinggroup',
-            component: GroupListView
+            component: GroupListView,
+            meta: {requiresAuth: true},
         },
         {
             path: '/shoppinggroup/:id',
             component: GroupView,
+            meta: {requiresAuth: true},
         },
         {
             path: '/shoppinggroup/create',
-            component: GroupCreateView
+            component: GroupCreateView,
+            meta: {requiresAuth: true},
         },
         {
             path: '/shoppinggroup/:id/edit',
-            component: GroupEditView
+            component: GroupEditView,
+            meta: {requiresAuth: true},
         },
         {
             path: '/shoppinggroup/:id/participation',
-            component: GroupParticipationView
+            component: GroupParticipationView,
+            meta: {requiresAuth: true},
         },
 
 
