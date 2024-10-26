@@ -28,12 +28,6 @@ const communication = (message) => {
 // console.log(props.chatList);
 </script>
 
-
-<!--chatroomState : String,-->
-<!--chatroomType : String,-->
-<!--chatroomTypeNum : Number,-->
-<!--userId : String,-->
-<!--userNickName : String-->
 <template>
   <div class="container">
     <div class="chat-panel">
@@ -41,6 +35,7 @@ const communication = (message) => {
       <ChatWindow v-bind:chatList="props.chatList"
                   :chatroomState="props.chatroomState"
                   :chatroomType="props.chatroomType"
+                  :chatroomTypeNum="props.chatroomTypeNum"
                   :userId="props.userId"
                   :userNickname="props.userNickname"
                   @communication="communication"/>
