@@ -50,38 +50,38 @@ onMounted(() => {
       </li>
 
       <li class="menu-item">
-<!--        <RouterLink to="/users/email" active-class="active">-->
+        <RouterLink to="/walkinggroups" active-class="active">
           <img src="@/assets/image/diversity_1.png" alt="icon" class="icon" />
           <span>산책 모임 보기</span>
-<!--        </RouterLink>-->
+        </RouterLink>
       </li>
 
       <li class="menu-item">
-<!--        <RouterLink to="/users/email" active-class="active">-->
+        <RouterLink to="/registerwalkinggroups" active-class="active">
           <img src="@/assets/image/groups.png" alt="icon" class="icon" />
           <span>산책 모임 목록 보기</span>
-<!--        </RouterLink>-->
+        </RouterLink>
       </li>
 
       <li class="menu-item">
-<!--        <RouterLink to="/users/email" active-class="active">-->
+        <RouterLink to="/shoppinggroup" active-class="active">
           <img src="@/assets/image/local_mall.png" alt="icon" class="icon" />
           <span>공동구매 하기</span>
-<!--        </RouterLink>-->
+        </RouterLink>
       </li>
 
       <li class="menu-item">
-<!--        <RouterLink to="/users/email" active-class="active">-->
+        <RouterLink to="/board" active-class="active">
           <img src="@/assets/image/content_paste.png" alt="icon" class="icon" />
           <span>게시판 보기</span>
-<!--        </RouterLink>-->
+        </RouterLink>
       </li>
 
       <li class="menu-item">
-<!--        <RouterLink to="/users/email" active-class="active">-->
+        <RouterLink to="/counseling" active-class="active">
           <img src="@/assets/image/admin_meds.png" alt="icon" class="icon" />
           <span>상담하기</span>
-<!--        </RouterLink>-->
+        </RouterLink>
       </li>
 
 

@@ -96,6 +96,11 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
+
+  header {
+    width: 100%;  /* 화면 전체 너비 차지 */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+  }
   .wrapper {
     display: flex;
     justify-content: center;
