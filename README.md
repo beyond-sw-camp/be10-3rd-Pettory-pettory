@@ -284,7 +284,7 @@
 
      ## 상담 질문 삭제
     
-    - 상담 질문을 수정할 수 있는 화면이다.
+    - 상담 질문을 삭제제할 수 있는 화면이다.
     
     ![상담 질문 삭제](./images/이미지/상담/상담_질문%20삭제_1.png)
  
@@ -364,7 +364,7 @@
 ### 상담
 
  <details>
-   <summary>게시판</summary>
+   <summary>상담담</summary>
    <div markdown="2">
 
 - 상담
@@ -389,7 +389,7 @@
 ### 공동구매
 
  <details>
-   <summary>게시판</summary>
+   <summary>공동구매매</summary>
    <div markdown="2">
 
 - 공동구매
