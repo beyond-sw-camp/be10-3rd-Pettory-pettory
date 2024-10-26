@@ -364,7 +364,7 @@
 ### 상담
 
  <details>
-   <summary>상담담</summary>
+   <summary>상담</summary>
    <div markdown="2">
 
 - 상담
@@ -389,7 +389,7 @@
 ### 공동구매
 
  <details>
-   <summary>공동구매매</summary>
+   <summary>공동구매</summary>
    <div markdown="2">
 
 - 공동구매
