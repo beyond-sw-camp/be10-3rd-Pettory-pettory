@@ -29,8 +29,6 @@
             />
             <CounselingButton @click="search" class="search-button">검색</CounselingButton>
           </div>
-
-
       </div>
     </div>
 
@@ -40,18 +38,18 @@
           v-for="(question, index) in paginatedQuestions"
           :key="index"
           class="question-item"
-          @click="goToQuestion(question.id)"
+          @click="goToQuestion(question.counselingQuestionNum)"
       >
         <div class="question-information">
-          <span class="question-category">{{ question.category }}</span>
-          <span class="question-views">조회 수 : {{ question.views }}</span>
+          <span class="question-category">{{ question.questionCategoryTitle }}</span>
+          <span class="question-views">조회 수 : {{ question.counselingQuestionHits }}</span>
         </div>
 
-        <div class="question-title">{{ question.title }}</div>
+        <div class="question-title">{{ question.counselingQuestionTitle }}</div>
         <img :src="question.thumbnail" alt="썸네일" class="question-thumbnail" />
           <div class="question-meta">
-            <span class="question-created-at">{{ question.createdAt }}</span>
-            <span class="question-author">{{ question.author }}</span>
+            <span class="question-created-at">{{ question.counselingQuestionInsertDatetime }}</span>
+            <span class="question-author">{{ question.userNickname }}</span>
           </div>
       </div>
     </div>
@@ -84,13 +82,14 @@ import CounselingPagingBar from "@/components/counseling/counseling/CounselingPa
 
 
 interface Question {
-  id: number;
-  category: string;
-  title: string;
-  createdAt: string;
-  author: string;
-  views: number;
-  thumbnail: string; // 썸네일 추가
+  counselingQuestionNum: number;
+  counselingQuestionHits: number;
+  counselingQuestionTitle: string;
+  counselingQuestionInsertDatetime: string;
+  userNickname: string;
+  questionCategoryNum: number;
+  questionCategoryTitle: string;
+  thumbnail: string;
 }
 
 interface Category {
@@ -114,7 +113,6 @@ export default defineComponent({
     const searchQuery = ref<string>('');
     const startPage = ref<number>(1);
 
-
     const totalPages = computed(() =>
         Math.ceil(filteredQuestions.value.length / questionsPerPage.value)
     );
@@ -132,8 +130,14 @@ export default defineComponent({
       if (selectedCategory.value === '전체') {
         return questions.value;
       }
-      return questions.value.filter(question => question.category === selectedCategory.value);
+      return questions.value.filter(question => getCategoryTitle(question.questionCategoryNum) === selectedCategory.value);
     });
+
+    // categoryNum과 일치하는 categoryTitle을 반환하는 함수
+    const getCategoryTitle = (categoryNum: number): string => {
+      const category = categories.value.find(cat => cat.categoryNum === categoryNum);
+      return category ? category.categoryTitle : "알 수 없는 카테고리"; // 카테고리를 찾지 못했을 때 기본 값
+    };
 
     // 필터링된 질문을 페이지에 맞게 자르기
     const paginatedQuestions = computed(() => {
@@ -166,18 +170,17 @@ export default defineComponent({
             Authorization: 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJta0BuYXZlci5jb20iLCJhdXRoIjpbIlJPTEVfVVNFUiJdLCJleHAiOjE3MzA1MjcwNzB9.zapMvpxgmz29epMtyrQZlsnCf91Hv796pcGLK353e8oEC5NoGpaEyoyil3kDXgUc24Zc98r7BLHfrIzxF0hdpw',
           },
         });
-
         console.log(response.data); // 응답 데이터 형식 확인용
-
         if (Array.isArray(response.data.questions)) {
           questions.value = response.data.questions.map((question: any) => ({
-            id: question.counselingQuestionNum,
-            category: question.counselingQuestionState,
-            title: question.counselingQuestionTitle,
-            createdAt: question.counselingQuestionInsertDatetime,
-            author: question.user.userNickname,
-            views: question.counselingQuestionHits,
-            thumbnail: question.counselingQuestionFileUrl,
+            counselingQuestionNum: question.counselingQuestionNum,
+            questionCategoryNum: question.questionCategoryNum,
+            questionCategoryTitle: getCategoryTitle(question.questionCategoryNum),
+            counselingQuestionTitle: question.counselingQuestionTitle,
+            counselingQuestionInsertDatetime: question.counselingQuestionInsertDatetime,
+            userNickname: question.user.userNickname,
+            counselingQuestionHits: question.counselingQuestionHits,
+            thumbnail: '/펫토리아이콘.png'
         }));
         } else {
           console.error("예상하지 못한 응답 형식입니다. 배열이 아닙니다.");
@@ -190,8 +193,6 @@ export default defineComponent({
     const goToPage = (page: number) => {
       currentPage.value = page;
     };
-
-
 
     const prevSet = () => {
       if (startPage.value > 1) {
@@ -258,11 +259,13 @@ export default defineComponent({
       search,
       searchQuery,
       goToQuestion,
-      router
+      router,
+      fetchCategories
     };
   }
 });
 </script>
+
 
 
 <style scoped>
