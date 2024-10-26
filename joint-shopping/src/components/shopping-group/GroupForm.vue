@@ -1,99 +1,166 @@
 <script setup>
-import { ref, watch, computed } from "vue";
+import {ref, watch, computed, defineEmits} from "vue";
+
+import ButtonLongColor from "@/components/common/ButtonLongColor.vue";
+import InputBoxLongGray from "@/components/common/InputBoxLongGray.vue";
 
 const props = defineProps({
   initialData: Object,
 });
 
 const formData = ref({
-  productName: "",
-  productPrice: 0,
-  productDescription: "",
-  categoryCode: 1,
-  productStock: 0,
-  productImg: null,
+  jointShoppingGroupName: "",
+  jointShoppingProducts: "",
+  jointShoppingInfo: "",
+  jointShoppingCost: null,
+  jointShoppingGroupMaximumCount: null,
+  jointShoppingParticipationMaximumCount: null,
+  jointShoppingCategory: "",
 });
 
 watch(() => props.initialData, (newData) => {
   if (newData) {
     Object.assign(formData.value, {
-      productName: newData.productName,
-      productPrice: newData.productPrice,
-      productDescription: newData.productDescription,
-      categoryCode: newData.category.categoryCode,
-      productStock: newData.productStock,
+      jointShoppingGroupName: newData.jointShoppingGroupName,
+      jointShoppingProducts: newData.jointShoppingProducts,
+      jointShoppingInfo: newData.jointShoppingInfo,
+      jointShoppingCost: newData.jointShoppingCost,
+      jointShoppingGroupMaximumCount: newData.jointShoppingGroupMaximumCount,
+      jointShoppingParticipationMaximumCount: newData.jointShoppingParticipationMaximumCount,
+      jointShoppingCategory: newData.jointShoppingCategory,
     });
   }
 });
 
-const handleFileChange = (e) => {
-  formData.value.productImg = e.target.files[0]; // 선택된 파일 저장
-};
-
+// emit 정의
 const emit = defineEmits(['submit']);
 
 const submitForm = () => {
-  const { productImg, ...rest } = formData.value;
-  const formDataToSend = new FormData();
-  formDataToSend.append("productRequest", new Blob([JSON.stringify({
-    ...rest,
-    status: 'USABLE'
-  })], { type: 'application/json' }));
-  formDataToSend.append("productImg", productImg);
-
-  emit("submit", formDataToSend);
+  emit('submit', formData.value);
 };
 
 const isFormValid = computed(() => {
   return (
-      formData.value.productName &&
-      formData.value.productPrice > 0 &&
-      formData.value.productStock > 0 &&
-      formData.value.productDescription &&
-      formData.value.categoryCode &&
-      formData.value.productImg
+      formData.value.jointShoppingGroupName &&
+      formData.value.jointShoppingProducts &&
+      formData.value.jointShoppingCost &&
+      formData.value.jointShoppingGroupMaximumCount &&
+      formData.value.jointShoppingParticipationMaximumCount &&
+      formData.value.jointShoppingCategory
   );
 });
 </script>
 
 <template>
-  <form @submit.prevent="submitForm" class="container mt-4">
-    <div class="mb-3">
-      <label for="productName" class="form-label">상품명</label>
-      <input type="text" id="productName" v-model="formData.productName" class="form-control" required />
+  <form class = "register-form" @submit.prevent="submitForm">
+
+    <div class="field-group form-group">
+      <label for="jointShoppingGroupName">*모임방 제목</label>
+      <br>
+      <InputBoxLongGray
+          type="text"
+          id="jointShoppingGroupName"
+          v-model="formData.jointShoppingGroupName"
+          placeholder="ex) 제목"
+      />
     </div>
 
-    <div class="mb-3">
-      <label for="productPrice" class="form-label">상품 가격</label>
-      <input type="number" id="productPrice" v-model.number="formData.productPrice" class="form-control" required />
+    <div class="field-group form-group">
+      <label for="jointShoppingCategory">*물품 카테고리</label>
+      <br>
+      <InputBoxLongGray
+          type="text"
+          id="jointShoppingCategory"
+          v-model="formData.jointShoppingCategory"
+          placeholder="ex) 사료"
+      />
     </div>
 
-    <div class="mb-3">
-      <label for="productDescription" class="form-label">상품 설명</label>
-      <textarea id="productDescription" v-model="formData.productDescription" class="form-control" required></textarea>
+    <div class="field-group form-group">
+      <label for="jointShoppingProducts">*물품명</label>
+      <br>
+      <InputBoxLongGray
+          type="text"
+          id="jointShoppingProducts"
+          v-model="formData.jointShoppingProducts"
+          placeholder="ex) 강아지용사료"
+      />
     </div>
 
-    <div class="mb-3">
-      <label for="categoryCode" class="form-label">카테고리</label>
-      <select id="categoryCode" v-model.number="formData.categoryCode" class="form-select" required>
-        <option value="1">식사</option>
-        <option value="2">디저트</option>
-        <option value="3">음료</option>
-      </select>
+    <div class="field-group form-group">
+      <label for="jointShoppingCost">*구매비용</label>
+      <br>
+      <InputBoxLongGray
+          type="text"
+          id="jointShoppingCost"
+          v-model="formData.jointShoppingCost"
+          placeholder="ex) 10000"
+      />
     </div>
 
-    <div class="mb-3">
-      <label for="productStock" class="form-label">재고 수량</label>
-      <input type="number" id="productStock" v-model.number="formData.productStock" class="form-control" required />
+    <div class="field-group form-group">
+      <label for="jointShoppingGroupMaximumCount">*모임방 최대인원</label>
+      <br>
+      <InputBoxLongGray
+          type="text"
+          id="jointShoppingGroupMaximumCount"
+          v-model="formData.jointShoppingGroupMaximumCount"
+          placeholder="ex) 50"
+      />
     </div>
 
-    <div class="mb-3">
-      <label for="productImg" class="form-label">상품 이미지</label>
-      <input type="file" id="productImg" @change="handleFileChange" class="form-control" accept="image/*" />
+    <div class="field-group form-group">
+      <label for="jointShoppingParticipationMaximumCount">*공동구매 최대인원</label>
+      <br>
+      <InputBoxLongGray
+          type="text"
+          id="jointShoppingParticipationMaximumCount"
+          v-model="formData.jointShoppingParticipationMaximumCount"
+          placeholder="ex) 10"
+      />
     </div>
 
-    <button type="submit" class="btn btn-primary w-100" :disabled="!isFormValid">제출</button>
+    <div class="field-group form-group">
+      <label for="jointShoppingInfo">상세 내용</label>
+      <br>
+      <InputBoxLongGray
+          type="text"
+          id="jointShoppingInfo"
+          v-model="formData.jointShoppingInfo"
+          placeholder="ex) 아무내용"
+      />
+    </div>
+
+
+    <ButtonLongColor type="submit" :disabled="!isFormValid">
+      입력완료
+    </ButtonLongColor>
+
   </form>
 </template>
 
+<style scoped>
+.register-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 40%;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
 
+.field-group {
+  width: 70%;
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  text-align: left;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+</style>

@@ -1,5 +1,5 @@
 <script setup>
-import {defineProps, defineEmits} from "vue";
+import {defineProps, defineEmits, computed} from "vue";
 import ButtonSmallColor from "@/components/common/ButtonSmallColor.vue";
 import GroupItem from "@/components/shopping-group-list/GroupItem.vue";
 import BackButton from "@/components/common/BackButton.vue";
@@ -14,7 +14,7 @@ const props = defineProps({
     type: Array,
     required: true
   },
-  range:{
+  range: {
     type: String,
     required: true
   },
@@ -49,16 +49,11 @@ const emitCheck = (groupNum, isActive, newBookmarks) => {
       <back-button :isModal=true @click="closeModal"/>
       <section class="top-section">
 
-        <GroupItem :group="group" :bookmarks="bookmarks" :range="range" :buttonVisible=false @check="emitCheck" />
+        <GroupItem :group="group" :bookmarks="bookmarks" :range="range" :buttonVisible=false @check="emitCheck"/>
       </section>
 
       <div class="group-content">
-        <div class="card-left-content">
-          <img :src="group.jointShoppingProductsFileDirectory" alt="없넹">
-        </div>
-        <div class="card-right-content">
-          <p>{{ group.jointShoppingInfo }}</p>
-        </div>
+        <p>{{ group.jointShoppingInfo }}</p>
       </div>
 
       <!-- 참가 버튼 -->
@@ -127,7 +122,7 @@ const emitCheck = (groupNum, isActive, newBookmarks) => {
   border-radius: 10px;
   margin: 10px;
   padding: 10px;
-  flex : 1;
+  flex: 1;
 }
 
 .card-right-content {
@@ -137,7 +132,7 @@ const emitCheck = (groupNum, isActive, newBookmarks) => {
   border-radius: 10px;
   margin: 10px;
   padding: 10px;
-  flex : 2;
+  flex: 2;
 }
 
 /* 모달 푸터 (액션 버튼들) */

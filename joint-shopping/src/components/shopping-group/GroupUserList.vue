@@ -63,7 +63,8 @@ const closeWithdrawalModal = () => {
       <GroupUserItem v-for="user in userList" :key="user.userId" :user="user" :isMaster="isMaster"
                      :isParticipation="isParticipation" @info="userInfo(user)" @withdrawal="userWithdrawal(user)"/>
       <UserInfoModal :user="selectedUser" :isVisible="isUserModalVisible" @close="closeInfoModal"/>
-      <ModalSmall :isVisible="isWithdrawalModalVisible" @close="closeWithdrawalModal" @confirm="confirmWithdrawalModal(selectedUser.userEmail)"/>
+      <ModalSmall :isVisible="isWithdrawalModalVisible" :message="'선택하신 회원을 강퇴 하시겠습니까?'"
+                  @close="closeWithdrawalModal" @confirm="confirmWithdrawalModal(selectedUser.userEmail)"/>
     </div>
   </div>
 </template>

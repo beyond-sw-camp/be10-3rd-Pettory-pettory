@@ -140,13 +140,13 @@ const closeExitModal = () => {
 }
 
 const confirmParticipationModal = async (groupNum) => {
-  isExitModalVisible.value = false;
+  isParticipationModalVisible.value = false;
   await ParticipationUser();
   await router.push(`/shoppinggroup/${groupNum}/participation`);
 }
 
 const closeParticipationModal = () => {
-  isExitModalVisible.value = false;
+  isParticipationModalVisible.value = false;
 }
 
 
@@ -204,7 +204,7 @@ onMounted(() => {
         <div>
           <div class="group-edit">
             <!--      지금 2번 수정페이지로, 특정페이지 이동 필요      -->
-            <ButtonSmallColor v-if="state.isMaster" @click="goToGroupEdit(state.groups[1].id)">모임방 수정</ButtonSmallColor>
+            <ButtonSmallColor v-if="state.isMaster" @click="goToGroupEdit(state.group.jointShoppingGroupNum)">모임방 수정</ButtonSmallColor>
             <p>물품명: {{ state.group.jointShoppingProducts }}</p>
             <p>공동구매비용: {{ state.group.jointShoppingCost }} 원</p>
           </div>
@@ -227,13 +227,14 @@ onMounted(() => {
         </div>
       </div>
 
-      <ModalSmall :isVisible="isExitModalVisible" @close="closeExitModal" @confirm="confirmExitModal"/>
-      <ModalSmall :isVisible="isParticipationModalVisible" @close="closeParticipationModal"
-                  @confirm="confirmParticipationModal(state.group.jointShoppingGroupNum)"/>
+      <ModalSmall :isVisible="isExitModalVisible" :message="'현재 모임방에서 나가시겠습니까?'"
+                  @close="closeExitModal" @confirm="confirmExitModal"/>
+      <ModalSmall :isVisible="isParticipationModalVisible" :message="'공동구매 참가를 하시겠습니까?'"
+                  @close="closeParticipationModal" @confirm="confirmParticipationModal(state.group.jointShoppingGroupNum)"/>
 
     </section>
     <section class="right-section">
-      <div class="chat-box">채팅</div>
+<!--      <ChattingMainWindow :chatroomState="" class="chat-box">채팅</ChattingMainWindow>-->
     </section>
   </div>
 </template>

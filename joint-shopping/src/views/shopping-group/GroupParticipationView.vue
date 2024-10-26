@@ -209,7 +209,8 @@ onMounted(() => {
                        :invoiceNum="state.group.hostInvoiceNum" @close="closeDeliveryInfo"
                        @confirm="confirmDeliveryInfo"/>
 
-    <ModalSmall :isVisible="isExitModalVisible" @close="closeExitParticipation" @confirm="confirmExitParticipation"/>
+    <ModalSmall :isVisible="isExitModalVisible" :message="'공동구매 참가를 취소하시겠습니까?'"
+                @close="closeExitParticipation" @confirm="confirmExitParticipation"/>
 
   </div>
 </template>

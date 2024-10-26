@@ -5,24 +5,38 @@ import GroupCreateForm from "@/components/shopping-group/GroupForm.vue";
 import {useRouter} from "vue-router";
 import GroupEditForm from "@/components/shopping-group/GroupForm.vue";
 import GroupForm from "@/components/shopping-group/GroupForm.vue";
+import {useAuthStore} from "@/stores/auth.js";
+import axios from "axios";
 
 const router = useRouter();
+const authStore = useAuthStore();
 
-// const handleProductCreate = async (formData) => {
-//   try {
-//     // FormData를 서버로 전송
-//     await axios.post("http://localhost:8080/api/v1/products", formData, {
-//       headers: {
-//         "Content-Type": "multipart/form-data",
-//       },
-//     });
-//
-//     // 상품 등록이 완료되면 목록 페이지로 이동
-//     router.push("/products");
-//   } catch (error) {
-//     console.error("상품 등록 중 오류 발생:", error);
-//   }
-// };
+const handleGroupCreate = async (formData) => {
+  const token = authStore.accessToken;
+
+  try {
+    // FormData를 서버로 전송
+    await axios.post("http://localhost:8080/jointshopping/groups",
+        {
+          jointShoppingGroupName: formData.jointShoppingGroupName,
+          jointShoppingProducts: formData.jointShoppingProducts,
+          jointShoppingInfo: formData.jointShoppingInfo,
+          jointShoppingCost: formData.jointShoppingCost,
+          jointShoppingGroupMaximumCount: formData.jointShoppingGroupMaximumCount,
+          jointShoppingParticipationMaximumCount: formData.jointShoppingParticipationMaximumCount,
+          jointShoppingCategory: formData.jointShoppingCategory,
+        }, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+    await router.push(`/shoppinggroup`);
+
+  } catch (error) {
+    console.error("오류 발생:", error);
+  }
+};
 
 </script>
 
@@ -31,8 +45,8 @@ const router = useRouter();
     <div class="text-center">
       <BackButton/>
       <h2>모임방 생성</h2>
-      <GroupForm @submit="handleProductCreate" />
     </div>
+    <GroupForm @submit="handleGroupCreate" />
   </main>
 </template>
 
@@ -40,6 +54,7 @@ const router = useRouter();
 .shopping-group-create {
   display: flex;
   flex-direction: column;
+  align-items: center;
   margin-left: 200px;
   margin-right: 200px;
 }

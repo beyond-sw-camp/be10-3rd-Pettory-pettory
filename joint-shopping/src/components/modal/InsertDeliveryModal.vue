@@ -1,9 +1,12 @@
 <script setup>
 import {defineProps, defineEmits, ref, watch, computed} from "vue";
+import ButtonLongColor from "@/components/common/ButtonLongColor.vue";
+import InputBoxLongGray from "@/components/common/InputBoxLongGray.vue";
+import BackButton from "@/components/common/BackButton.vue";
 
 // props 정의
 const props = defineProps({
-  message: String,  // 모달 내용
+
   confirmText: {
     type: String,
     default: '확인',
@@ -60,28 +63,41 @@ const isFormValid = computed(() => {
   <!-- 모달이 보일 때만 렌더링 -->
   <div v-if="isVisible" class="modal-overlay" @click.self="closeModal">
 
-    <div class="modal-content">
-      <!-- 모달 헤더 -->
+    <form class = "register-form" @submit.prevent="submitForm">
+
       <div class="modal-header">
-        <button class="close-button" @click="closeModal" v-if="isClosable">✕</button>
+        <back-button class="close-button"  :isModal=true @click="closeModal" />
+        <h2>배송정보 입력</h2>
       </div>
 
-      <form @submit.prevent="submitForm" class="container mt-4">
-        <div class="mb-3">
-          <label for="courierCode" class="form-label">*택배사</label>
-          <input type="text" id="courierCode" v-model="formData.courierCode" class="form-control" required />
-        </div>
+      <div class="field-group form-group">
+        <label for="courierCode">*택배사</label>
+        <br>
+        <InputBoxLongGray
+            type="text"
+            id="courierCode"
+            v-model="formData.courierCode"
+            placeholder="ex) 경동택배"
+        />
+      </div>
 
-        <div class="mb-3">
-          <label for="invoiceNum" class="form-label">*운송장 번호</label>
-          <input type="text" id="invoiceNum" v-model="formData.invoiceNum" class="form-control" required />
-        </div>
+      <div class="field-group form-group">
+        <label for="invoiceNum">*운송장 번호</label>
+        <br>
+        <InputBoxLongGray
+            type="text"
+            id="invoiceNum"
+            v-model="formData.invoiceNum"
+            placeholder="ex) 5757348437"
+        />
+      </div>
 
-        <button type="submit" class="btn btn-primary w-100" :disabled="!isFormValid">제출</button>
-      </form>
+      <ButtonLongColor type="submit" :disabled="!isFormValid">
+        제출
+      </ButtonLongColor>
 
+    </form>
 
-    </div>
   </div>
 </template>
 
@@ -99,15 +115,31 @@ const isFormValid = computed(() => {
   z-index: 1000;
 }
 
-/* 모달 콘텐츠 */
-.modal-content {
-  background-color: white;
+.register-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 40%;
   padding: 20px;
+  border: 1px solid #ccc;
   border-radius: 10px;
-  max-width: 400px;
-  width: 100%;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
 }
+
+.field-group {
+  width: 70%;
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  text-align: left;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+
+
 
 .modal-header {
   display: flex;
@@ -116,48 +148,4 @@ const isFormValid = computed(() => {
   margin-bottom: 10px;
 }
 
-.close-button {
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-/* 모달 내용 */
-.modal-body {
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-/* 모달 푸터 (액션 버튼들) */
-.modal-footer {
-  display: flex;
-  justify-content: space-between;
-}
-
-.confirm-button {
-  background-color: #53D9C1;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.confirm-button:hover {
-  background-color: #45c1a8;
-}
-
-.cancel-button {
-  background-color: #f5f5f5;
-  color: black;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.cancel-button:hover {
-  background-color: #e0e0e0;
-}
 </style>
