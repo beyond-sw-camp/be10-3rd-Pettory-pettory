@@ -19,16 +19,7 @@
             {{ category.categoryTitle }}
           </li>
         </ul>
-        <!-- 검색창과 검색 버튼 -->
-        <div class="search-container">
-          <input
-              type="text"
-              v-model="searchQuery"
-              placeholder="검색어를 입력하세요"
-              class="search-input"
-          />
-          <BoardButton @click="search" class="search-button">검색</BoardButton>
-        </div>
+
       </div>
     </div>
 
@@ -82,6 +73,7 @@ import axios from 'axios';
 import { useRouter } from 'vue-router';
 import BoardButton from "@/components/board/board/BoardButton.vue";
 import BoardPagingBar from "@/components/board/board/BoardPagingBar.vue";
+import {useAuthStore} from "@/stores/auth.js";
 
 
 interface Post {
@@ -106,6 +98,7 @@ export default defineComponent({
     BoardPagingBar
   },
   setup() {
+    const authStore = useAuthStore();
     const posts = ref<Post[]>([]);
     const categories = ref<Category[]>([]);  // 데이터베이스에서 가져올 카테고리 목록
     const selectedCategory = ref<string>('전체');  // 기본 선택된 카테고리
@@ -154,8 +147,7 @@ export default defineComponent({
       try {
         const response = await axios.get('http://localhost:8080/board/categorys', {
           headers: {
-            Authorization: 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJta0BuYXZlci5jb20iLCJhdXRoIjpbIlJPTEVfVVNFUiJdLCJleHAiOjE3MzAzMzU2MzR9.rY_B7TQAfq_4Ti0XcFN5gUC3BQPHFux57Id8pJ2qF2lTlr4pekMVyYcgDQ5IJNu8K-QlFdhWEGICPPB2bUOCoA',
-          },
+            Authorization: `Bearer ${authStore.accessToken}`,          },
         });
         categories.value = response.data.map((category: any) => ({
           categoryNum: category.categoryNum,
@@ -171,8 +163,7 @@ export default defineComponent({
       try {
         const response = await axios.get('http://localhost:8080/board/posts',{
           headers: {
-            Authorization: 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJta0BuYXZlci5jb20iLCJhdXRoIjpbIlJPTEVfVVNFUiJdLCJleHAiOjE3MzAzMzU2MzR9.rY_B7TQAfq_4Ti0XcFN5gUC3BQPHFux57Id8pJ2qF2lTlr4pekMVyYcgDQ5IJNu8K-QlFdhWEGICPPB2bUOCoA',
-          },
+            Authorization: `Bearer ${authStore.accessToken}`,          },
         });
         console.log(response.data); // 응답 데이터 구조를 확인하기 위해 추가
         posts.value = response.data.postList.map((post: any) => ({

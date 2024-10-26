@@ -42,6 +42,7 @@
 import { ref, onMounted } from 'vue';
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
+import {useAuthStore} from "@/stores/auth.js";
 
 import { useRouter } from "vue-router";
 import axios from "axios";
@@ -52,6 +53,7 @@ export default {
     BoardButton,
   },
   setup() {
+    const authStore = useAuthStore();
     const quillEditor = ref(null);
     const quill = ref<Quill | null>(null);
     const postTitle = ref('');
@@ -120,8 +122,7 @@ export default {
       try {
         const response = await axios.post('http://localhost:8080/board/posts/image', formData, {
           headers: {
-            Authorization: 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJta0BuYXZlci5jb20iLCJhdXRoIjpbIlJPTEVfVVNFUiJdLCJleHAiOjE3MzA0Mzk4MzV9.q5PbbqoQkaMlO7pXi3VNHUiLfIN4aCIna7vy03MMNQ9lsciRmDyNpNet6-v61NwxoSs8CZKE-uR9ZW2foVMQhA',
-          },
+            Authorization: `Bearer ${authStore.accessToken}`,          },
         });
 
         const imageUrl = response.data.url; // 서버에서 받은 이미지 URL
@@ -199,7 +200,7 @@ export default {
       try {
         const response = await axios.post('http://localhost:8080/board/posts', newPost, {
           headers: {
-            Authorization: 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJta0BuYXZlci5jb20iLCJhdXRoIjpbIlJPTEVfVVNFUiJdLCJleHAiOjE3MzA0Mzk4MzV9.q5PbbqoQkaMlO7pXi3VNHUiLfIN4aCIna7vy03MMNQ9lsciRmDyNpNet6-v61NwxoSs8CZKE-uR9ZW2foVMQhA',
+            Authorization: `Bearer ${authStore.accessToken}`,
             'Content-Type': 'application/json',
           },
         });

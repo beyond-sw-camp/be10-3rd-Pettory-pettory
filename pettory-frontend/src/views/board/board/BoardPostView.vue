@@ -60,7 +60,7 @@ export default {
       createdAt: '2024-10-11 16:17',
       views: 20,
       content: '게시글 내용~게시글 내용~',
-      imageUrl: '/path/to/image.jpg',
+      imageUrl: '/펫토리아이콘.png',
       category: '카테고리 이름',
     });
 
