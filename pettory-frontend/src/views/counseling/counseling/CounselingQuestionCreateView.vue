@@ -169,7 +169,7 @@ export default {
       isCategoryListVisible.value = false;
     };
 
-    // 게시글 저장
+    // 질문 저장
     const saveQuestion = async () => {
       if (!questionTitle.value || !questionContent.value || !selectedCategoryNum.value) {
         alert('제목, 내용, 카테고리를 모두 입력해주세요.');

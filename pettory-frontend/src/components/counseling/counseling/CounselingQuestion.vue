@@ -12,13 +12,11 @@
 import { defineComponent, PropType } from 'vue';
 
 interface Question {
-  id: number;
   category: string;
   title: string;
   createdAt: string;
   author: string;
   views: number;
-  thumbnail: string;
 }
 
 export default defineComponent({
