@@ -13,12 +13,13 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
+import axios from "axios";
 
 export default defineComponent({
   props: {
     show: {
       type: Boolean,
-      default: false
+      default: false,
     }
   },
   setup(props, { emit }) {
@@ -31,8 +32,25 @@ export default defineComponent({
     const confirmCreate = () => {
       if (newCategoryName.value.trim() !== '') {
         emit('create', newCategoryName.value);
+        emit('create-success'); // 부모 컴포넌트로 성공 이벤트 전달
       }
+      createCategoryToDB(newCategoryName.value);
       closeModal();
+    };
+
+    const createCategoryToDB = async (newCategoryName) => {
+      try{
+        // 서버로 전송
+        await axios.post("http://localhost:8080/board/categorys",{
+          categoryTitle : newCategoryName,
+        },{
+          headers: {
+            Authorization: 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJta0BuYXZlci5jb20iLCJhdXRoIjpbIlJPTEVfVVNFUiJdLCJleHAiOjE3MzAzNTQ4OTF9.nLn_NaNBr3y_gxCULCPVS0Eq8BSqb1kSBhB0P-_XpsX6r7QY0oH4ZEpgFncA5VUA1Ro72ZlU4P-JLwTL1o65vQ' // 올바른 토큰 사용
+          }
+        });
+      }catch(error){
+        console.log("카테고리 등록 중 오류 발생: ", error)
+      }
     };
 
     return {

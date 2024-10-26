@@ -6,13 +6,13 @@
       <ul v-if="isCategoryListVisible" class="category-list">
         <li
             v-for="category in categories"
-            :key="category"
+            :key="category.categoryNum"
             @click="selectCategory(category)"
         >
-          {{ category }}
+          {{ category.categoryTitle }}
         </li>
       </ul>
-      <p v-if="selectedCategory">선택한 카테고리: {{ selectedCategory }}</p>
+      <p v-if="selectedCategoryTitle">선택한 카테고리: {{ selectedCategoryTitle }}</p>
     </div>
 
     <!-- 게시글 제목 입력 -->
@@ -37,12 +37,14 @@
   </div>
 </template>
 
+
 <script lang="ts">
 import { ref, onMounted } from 'vue';
 import Quill from 'quill';
-import 'quill/dist/quill.snow.css'; // Quill 기본 테마
+import 'quill/dist/quill.snow.css';
 import BoardButton from '@/board/components/BoardButton.vue';
-import {useRouter} from "vue-router"; // 카테고리 선택용 버튼 컴포넌트
+import { useRouter } from "vue-router";
+import axios from "axios";
 
 export default {
   components: {
@@ -50,70 +52,176 @@ export default {
   },
   setup() {
     const quillEditor = ref(null);
+    const quill = ref<Quill | null>(null);
     const postTitle = ref('');
     const postContent = ref('');
-    const selectedCategory = ref('');
-    const categories = ref(['IT', '생활', '여행']); // 카테고리 목록
+    const selectedCategoryNum = ref<number | null>(null);
+    const selectedCategoryTitle = ref<string>('');
+    const categories = ref<{ categoryNum: number; categoryTitle: string }[]>([]);
     const isCategoryListVisible = ref(false);
     const router = useRouter();
 
     onMounted(() => {
-      const quill = new Quill(quillEditor.value, {
+      quill.value = new Quill(quillEditor.value, {
         theme: 'snow',
         placeholder: '게시글 내용을 작성하세요',
         modules: {
-          toolbar: [
-            [{ header: [1, 2, false] }],
-            ['bold', 'italic', 'underline'],
-            ['link', 'image'],
-            [{ list: 'ordered' }, { list: 'bullet' }],
-            ['clean'], // formatting 제거 버튼
-          ],
+          toolbar: {
+            container: [
+              [{ header: [1, 2, false] }],
+              ['bold', 'italic', 'underline'],
+              ['image'],
+              [{ list: 'ordered' }, { list: 'bullet' }],
+              ['clean'],
+            ],
+            handlers: {
+              image: () => {
+                selectAndUploadImage(); // 이미지 업로드 통합 핸들러
+              },
+            },
+          },
         },
       });
 
-      quill.on('text-change', () => {
-        postContent.value = quill.root.innerHTML;
+      quill.value.on('text-change', () => {
+        postContent.value = quill.value?.root.innerHTML || '';
       });
+
+      fetchCategories(); // 카테고리 목록 가져오기
     });
 
+    // 이미지 선택 및 서버 전송 통합 함수
+    const selectAndUploadImage = async (imageSrc = null) => {
+      const formData = new FormData();
+
+      if (imageSrc) {
+        const blob = await (await fetch(imageSrc)).blob();
+        formData.append('file', blob);
+      } else {
+        const input = document.createElement('input');
+        input.setAttribute('type', 'file');
+        input.setAttribute('accept', 'image/*');
+        input.click();
+
+        input.onchange = async () => {
+          const file = input.files[0];
+          formData.append('file', file);
+          await uploadImageToServer(formData);
+        };
+        return; // `onchange` 이벤트에서 처리되므로 종료
+      }
+
+      await uploadImageToServer(formData);
+    };
+
+    // 서버로 이미지 전송 함수
+    const uploadImageToServer = async (formData) => {
+      try {
+        const response = await axios.post('http://localhost:8080/board/posts/image', formData, {
+          headers: {
+            Authorization: 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJta0BuYXZlci5jb20iLCJhdXRoIjpbIlJPTEVfVVNFUiJdLCJleHAiOjE3MzA0Mzk4MzV9.q5PbbqoQkaMlO7pXi3VNHUiLfIN4aCIna7vy03MMNQ9lsciRmDyNpNet6-v61NwxoSs8CZKE-uR9ZW2foVMQhA',
+          },
+        });
+
+        const imageUrl = response.data.url; // 서버에서 받은 이미지 URL
+        insertToEditor(imageUrl);
+      } catch (error) {
+        console.error('이미지 업로드 실패:', error);
+      }
+    };
+
+    // 에디터에 이미지 URL 삽입
+    const insertToEditor = (url) => {
+      const range = quill.value?.getSelection();
+      if (range) {
+        quill.value.insertEmbed(range.index, 'image', url);
+      }
+    };
+
+    // 카테고리 목록 가져오기
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/board/categorys', {
+          headers: {
+            Authorization: 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJta0BuYXZlci5jb20iLCJhdXRoIjpbIlJPTEVfVVNFUiJdLCJleHAiOjE3MzA0Mzk4MzV9.q5PbbqoQkaMlO7pXi3VNHUiLfIN4aCIna7vy03MMNQ9lsciRmDyNpNet6-v61NwxoSs8CZKE-uR9ZW2foVMQhA',
+          },
+        });
+
+        categories.value = response.data.map((category: any) => ({
+          categoryNum: category.categoryNum,
+          categoryTitle: category.categoryTitle,
+        }));
+      } catch (error) {
+        console.error('카테고리 목록을 불러오는 중 오류 발생:', error);
+      }
+    };
+
+    // 카테고리 선택 토글
     const toggleCategoryList = () => {
       isCategoryListVisible.value = !isCategoryListVisible.value;
     };
 
+    // 카테고리 선택 처리
     const selectCategory = (category) => {
-      selectedCategory.value = category;
+      selectedCategoryNum.value = category.categoryNum;
+      selectedCategoryTitle.value = category.categoryTitle;
       isCategoryListVisible.value = false;
     };
 
     // 게시글 저장
-    const savePost = () => {
-      if (!postTitle.value || !postContent.value || !selectedCategory.value) {
+    const savePost = async () => {
+      if (!postTitle.value || !postContent.value || !selectedCategoryNum.value) {
         alert('제목, 내용, 카테고리를 모두 입력해주세요.');
         return;
       }
 
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(postContent.value, 'text/html');
+      const images = Array.from(doc.querySelectorAll('img'));
+
+      for (const img of images) {
+        const imageUrl = img.getAttribute('src');
+        if (imageUrl && imageUrl.startsWith('data:')) {
+          await selectAndUploadImage(imageUrl);
+          img.setAttribute('src', imageUrl); // 서버 URL로 변경된 후 재설정
+        }
+      }
+
+      const updatedHtmlContent = doc.body.innerHTML;
       const newPost = {
-        title: postTitle.value,
-        content: postContent.value,
-        category: selectedCategory.value,
-        createdAt: new Date().toISOString(),
+        postTitle: postTitle.value,
+        postContent: updatedHtmlContent,
+        postWriterNum: 10,
+        postCategoryNum: selectedCategoryNum.value,
       };
 
-      // 저장된 데이터를 콘솔에 출력
-      console.log('저장된 게시글:', newPost);
+      try {
+        const response = await axios.post('http://localhost:8080/board/posts', newPost, {
+          headers: {
+            Authorization: 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJta0BuYXZlci5jb20iLCJhdXRoIjpbIlJPTEVfVVNFUiJdLCJleHAiOjE3MzA0Mzk4MzV9.q5PbbqoQkaMlO7pXi3VNHUiLfIN4aCIna7vy03MMNQ9lsciRmDyNpNet6-v61NwxoSs8CZKE-uR9ZW2foVMQhA',
+            'Content-Type': 'application/json',
+          },
+        });
 
-      // 여기에 서버 API로 데이터를 전송하는 로직을 추가할 수 있습니다.
-      alert('게시글이 저장되었습니다.');
-      router.push('/board');
-
+        if (response.status === 201) {
+          alert('게시글이 저장되었습니다.');
+          router.push('/board');
+        } else {
+          console.error('예상치 못한 응답:', response);
+          alert('게시글 저장 중 문제가 발생했습니다.');
+        }
+      } catch (error) {
+        console.error('게시글 저장 실패:', error);
+        alert(error.response ? error.response.data.message : '서버 오류가 발생했습니다.');
+      }
     };
 
     return {
       quillEditor,
       postTitle,
       postContent,
-      selectedCategory,
+      selectedCategoryTitle,
+      selectedCategoryNum,
       categories,
       isCategoryListVisible,
       toggleCategoryList,
@@ -171,7 +279,6 @@ export default {
 
 .quill-editor {
   height: 500px;
-
 }
 
 .actions {
